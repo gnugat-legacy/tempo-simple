@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TempoSimple\Domain\TimeTracking\TimeCard;
 
 class GenerateBillableReportCommand extends ContainerAwareCommand
 {
@@ -54,28 +55,12 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
                 $workingHours[$task] = 0.0;
             }
 
-            $startHour = $timeCard->getStartHour();
-            $endHour = $timeCard->getEndHour();
-
-            list($startHourNumber, $startQuarter) = explode(':', $startHour);
-            list($endHourNumber, $endQuarter) = explode(':', $endHour);
-
-            $quarters = array(
-                '00' => 0.0,
-                '15' => 0.25,
-                '30' => 0.5,
-                '45' => 0.75,
+            $timeCard = new TimeCard(
+                $timeCard->getStartHour(),
+                $timeCard->getEndHour()
             );
 
-            if ($startHourNumber === $endHourNumber) {
-                $total = $quarters[$endQuarter] - $quarters[$startQuarter];
-            } else {
-                $timeToOne = 1.0 - $quarters[$startQuarter];
-                $hourDiff = intval($endHourNumber) - intval($startHourNumber) - 1;
-                $total = $hourDiff + $timeToOne + $quarters[$endQuarter];
-            }
-
-            $workingHours[$task] += $total;
+            $workingHours[$task] += $timeCard->getWorkingHours();
         }
 
         $workingDays = array();
