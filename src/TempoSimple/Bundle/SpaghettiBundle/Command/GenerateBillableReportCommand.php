@@ -15,6 +15,8 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TempoSimple\Domain\TimeTracking\Project;
+use TempoSimple\Domain\TimeTracking\Task;
 use TempoSimple\Domain\TimeTracking\TimeCard;
 use TempoSimple\Domain\TimeTracking\Timesheet;
 
@@ -40,27 +42,30 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
         $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
         $templating = $this->getContainer()->get('templating');
 
-        $timeCards = $timeCardrepository->findBillable(
-            $input->getOption('month'),
-            $input->getOption('project')
-        );
+        $month = $input->getOption('month');
+        $projectName = $input->getOption('project');
 
-        $tasks = array();
+        $project = new Project($projectName);
+
+        $timeCards = $timeCardrepository->findBillable($month, $projectName);
         foreach ($timeCards as $timeCard) {
-            $task = $timeCard->getTaskTitle();
-            if (!isset($tasks[$task])) {
-                $tasks[$task] = new Timesheet();
-            }
+            $taskTitle = $timeCard->getTaskTitle();
+            $startHour = $timeCard->getStartHour();
+            $endHour = $timeCard->getEndHour();
 
-            $timeCard = new TimeCard(
-                $timeCard->getStartHour(),
-                $timeCard->getEndHour()
-            );
-            $tasks[$task]->addTimeCard($timeCard);
+            $timeCard = new TimeCard($startHour, $endHour);
+
+            if (!$project->hasTask($taskTitle)) {
+                $timesheet = new Timesheet();
+                $task = new Task($timesheet, $taskTitle);
+                $project->addTask($task);
+            }
+            $task = $project->getTask($taskTitle);
+            $task->addTimeCard($timeCard, $taskTitle);
         }
 
         $view = 'TempoSimpleSpaghettiBundle:Report:billable.md.twig';
-        $parameters = array('tasks' => $tasks);
+        $parameters = array('tasks' => $project->getTasks());
 
         $output->writeln($templating->render($view, $parameters));
     }
