@@ -1,3 +1,3 @@
-{% for task, time in workingDays %}
-* {{ task }} : {{ time }}
+{% for task, timesheet in tasks %}
+* {{ task }} : {{ timesheet.getTotalWorkingDays }}
 {% endfor %}

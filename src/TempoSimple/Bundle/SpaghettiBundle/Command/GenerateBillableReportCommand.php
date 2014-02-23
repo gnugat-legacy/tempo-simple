@@ -15,12 +15,14 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TempoSimple\Domain\TimeTracking\Project;
+use TempoSimple\Domain\TimeTracking\Task;
+use TempoSimple\Domain\TimeTracking\TimeCard;
+use TempoSimple\Domain\TimeTracking\Timesheet;
 
 class GenerateBillableReportCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this->setName('tempo-simple:generate:billable-report');
@@ -34,56 +36,36 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
         $templating = $this->getContainer()->get('templating');
 
-        $timeCards = $timeCardrepository->findBillable(
-            $input->getOption('month'),
-            $input->getOption('project')
-        );
+        $month = $input->getOption('month');
+        $projectName = $input->getOption('project');
 
-        $workingHours = array();
+        $project = new Project($projectName);
+
+        $timeCards = $timeCardrepository->findBillable($month, $projectName);
         foreach ($timeCards as $timeCard) {
-            $task = $timeCard->getTaskTitle();
-            if (!isset($workingHours[$task])) {
-                $workingHours[$task] = 0.0;
-            }
-
+            $taskTitle = $timeCard->getTaskTitle();
             $startHour = $timeCard->getStartHour();
             $endHour = $timeCard->getEndHour();
 
-            list($startHourNumber, $startQuarter) = explode(':', $startHour);
-            list($endHourNumber, $endQuarter) = explode(':', $endHour);
+            $timeCard = new TimeCard($startHour, $endHour);
 
-            $quarters = array(
-                '00' => 0.0,
-                '15' => 0.25,
-                '30' => 0.5,
-                '45' => 0.75,
-            );
-
-            if ($startHourNumber === $endHourNumber) {
-                $total = $quarters[$endQuarter] - $quarters[$startQuarter];
-            } else {
-                $timeToOne = 1.0 - $quarters[$startQuarter];
-                $hourDiff = intval($endHourNumber) - intval($startHourNumber) - 1;
-                $total = $hourDiff + $timeToOne + $quarters[$endQuarter];
+            if (!$project->hasTask($taskTitle)) {
+                $timesheet = new Timesheet();
+                $task = new Task($timesheet, $taskTitle);
+                $project->addTask($task);
             }
-
-            $workingHours[$task] += $total;
+            $task = $project->getTask($taskTitle);
+            $task->addTimeCard($timeCard, $taskTitle);
         }
 
-        $workingDays = array();
-        foreach ($workingHours as $task => $workingHour) {
-            $workingDays[$task] = $workingHour / 8.0;
-        }
         $view = 'TempoSimpleSpaghettiBundle:Report:billable.md.twig';
-        $parameters = array('workingDays' => $workingDays);
+        $parameters = array('tasks' => $project->getTasks());
 
         $output->writeln($templating->render($view, $parameters));
     }

@@ -1,5 +1,13 @@
 # Changes between versions
 
+## 0.1.1: Refactoring session 1
+
+* creation of the TimeTracking Domain
+* creation of the TimeCard model
+* creation of the Timesheet model
+* creation of the Task model
+* creation of the Project model
+
 ## 0.1.0: Command Line Interface (CLI)
 
 * punch new time cards

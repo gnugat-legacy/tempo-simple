@@ -17,18 +17,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class GenerateWeeklyReportCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this->setName('tempo-simple:generate:weekly-report');
         $this->setAliases(array('weekly'));
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');

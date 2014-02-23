@@ -20,9 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class PunchTimeCardCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this->setName('tempo-simple:punch:time-card');
@@ -43,9 +41,7 @@ class PunchTimeCardCommand extends ContainerAwareCommand
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
