@@ -15,7 +15,6 @@ it  and ship it again!
 
 * the spaghetti bundle should be split up:
   + create a cli bundle
-  + create a time tracking domain
 
 ## Commands
 
@@ -26,13 +25,13 @@ it  and ship it again!
 ## Model
 
 * the model is higly coupled to Doctrine2: create some model class
+* decouple the model from Doctrine2:
+  + create domain repository
+  + create gateway interfaces
+  + create factories
 * the schema isn't flexible:
   + create a project table
   + create a task table
-
-## Tests
-
-* missing unit tests (well, there's no services to test...)
 
 ## Next readings
 
