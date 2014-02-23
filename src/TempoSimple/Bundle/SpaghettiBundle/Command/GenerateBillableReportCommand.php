@@ -20,9 +20,7 @@ use TempoSimple\Domain\TimeTracking\Timesheet;
 
 class GenerateBillableReportCommand extends ContainerAwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this->setName('tempo-simple:generate:billable-report');
@@ -36,9 +34,7 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
         );
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
