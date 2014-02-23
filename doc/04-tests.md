@@ -10,6 +10,15 @@ Functional tests can be run using the following command:
 
 Functional tests will simply run a command and check its exit status.
 
+## Specification
+
+Specification tests can be run using the following command:
+
+    vendor/bin/phpspec --config=app run
+
+Specification tests describes how a class should behave. It's similar to unit
+tests, but with self explicit names for test methods.
+
 ## Next readings
 
 * [technical debt](05-technical-debt.md)
