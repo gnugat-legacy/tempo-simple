@@ -1,0 +1,23 @@
+Bonjour,
+
+À défaut de pouvoir participer au weekly stand up, voici mon weekly report !
+
+# Bilan
+{% for project, tasks in projects %}
+
+## {{ project }}
+
+{% for task, descriptions in tasks %}
+{% for description in descriptions %}
+* {{ task }} : {{ description }}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+
+# Perspectives
+
+# Remarques
+
+Bonne semaine à tous !
+
+Cordialement,

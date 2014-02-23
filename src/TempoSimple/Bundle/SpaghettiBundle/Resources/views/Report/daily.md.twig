@@ -1,0 +1,17 @@
+Bonjour,
+
+Voici le rapport de la journée du {{ date }}.
+
+# Bilan
+
+{% for task, descriptions in tasks %}
+{% for description in descriptions %}
+* {{ task }} : {{ description }}
+{% endfor %}
+{% endfor %}
+
+# Perspectives
+
+# Remarques
+
+Cordialement,
