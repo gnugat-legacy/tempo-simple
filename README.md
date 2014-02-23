@@ -4,6 +4,9 @@ A time tracking project: punch new time cards and generate reports!
 
 Read more about this project in [its introduction](doc/01-introduction.md).
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/50ae922b-4070-4a64-a943-ce1278fb8c48/big.png)](https://insight.sensiolabs.com/projects/50ae922b-4070-4a64-a943-ce1278fb8c48)
+[![Travis CI](https://travis-ci.org/gnugat/tempo-simple.png)](https://travis-ci.org/gnugat/tempo-simple)
+
 ## Features
 
     [x] Command Line interface (CLI)
