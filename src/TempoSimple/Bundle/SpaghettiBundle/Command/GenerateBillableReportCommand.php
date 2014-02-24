@@ -18,7 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TempoSimple\Domain\TimeTracking\Project;
 use TempoSimple\Domain\TimeTracking\Task;
 use TempoSimple\Domain\TimeTracking\TimeCard;
-use TempoSimple\Domain\TimeTracking\Timesheet;
 
 class GenerateBillableReportCommand extends ContainerAwareCommand
 {
@@ -56,12 +55,11 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
             $timeCard = new TimeCard($startHour, $endHour);
 
             if (!$project->hasTask($taskTitle)) {
-                $timesheet = new Timesheet();
-                $task = new Task($timesheet, $taskTitle);
+                $task = new Task($taskTitle);
                 $project->addTask($task);
             }
             $task = $project->getTask($taskTitle);
-            $task->addTimeCard($timeCard, $taskTitle);
+            $task->addTimeCard($timeCard);
         }
 
         $view = 'TempoSimpleSpaghettiBundle:Report:billable.md.twig';
