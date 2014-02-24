@@ -11,11 +11,10 @@
 
 namespace TempoSimple\Test\Functional\Cli;
 
-use TempoSimple\Bundle\SpaghettiBundle\Command\TimeCardAddCommand;
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Tester\CommandTester;
 
 class CommandTestCase extends WebTestCase
 {

@@ -11,12 +11,12 @@
 
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCard;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCard;
 
 class PunchTimeCardCommand extends ContainerAwareCommand
 {

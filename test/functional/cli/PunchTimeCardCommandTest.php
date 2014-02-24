@@ -11,9 +11,9 @@
 
 namespace TempoSimple\Test\Functional\Cli;
 
-use TempoSimple\Bundle\SpaghettiBundle\Command\PunchTimeCardCommand;
-use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
+use TempoSimple\Bundle\SpaghettiBundle\Command\PunchTimeCardCommand;
 
 class PunchTimeCardCommandTest extends CommandTestCase
 {
