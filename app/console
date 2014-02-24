@@ -28,4 +28,5 @@ if ($debug) {
 
 $kernel = new AppKernel($env, $debug);
 $application = new Application($kernel);
+$application->setDefaultCommand('cheat');
 $application->run($input);
