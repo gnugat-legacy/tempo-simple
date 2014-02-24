@@ -1,0 +1,25 @@
+# TempoSimple's Cheat Sheet
+
+## Aliases
+
+    alias ts='php app/console -e=prod'
+
+## Punch new time card
+
+    ts punch task start-hour end-hour -D description -p project
+
+## Reports
+
+    ts daily
+    ts daily -d day
+
+    ts weekly
+
+    ts billable -p project
+    ts billable -p project -m month
+
+## Time formats
+
+* hour: `H:i` (e.g. `09:00`, `13:45`)
+* day: `Y-m-d` (e.g. `1989-01-25`)
+* month: `Y-m` (e.g. `2004-09`)
