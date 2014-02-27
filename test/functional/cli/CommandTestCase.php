@@ -11,6 +11,7 @@
 
 namespace TempoSimple\Test\Functional\Cli;
 
+use Prophecy\Prophet;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -20,8 +21,13 @@ class CommandTestCase extends WebTestCase
 {
     const EXIT_SUCCESS = 0;
 
-    protected $command;
+    protected $prophet;
     protected $commandTester;
+
+    protected function setUp()
+    {
+        $this->prophet = new Prophet();
+    }
 
     /**
      * Sets the CommandTester

@@ -11,12 +11,35 @@
 
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Templating\EngineInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 
-class GenerateWeeklyReportCommand extends ContainerAwareCommand
+class GenerateWeeklyReportCommand extends Command
 {
+    /** @var TimeCardRepository */
+    private $timeCardrepository;
+
+    /** @var EngineInterface */
+    private $templating;
+
+    /**
+     * @param TimeCardRepository $timeCardrepository
+     * @param EngineInterface    $templating
+     */
+    public function __construct(
+        TimeCardRepository $timeCardrepository,
+        EngineInterface $templating
+    )
+    {
+        $this->timeCardrepository = $timeCardrepository;
+        $this->templating = $templating;
+
+        parent::__construct();
+    }
+
     /** {@inheritdoc} */
     protected function configure()
     {
@@ -27,10 +50,7 @@ class GenerateWeeklyReportCommand extends ContainerAwareCommand
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
-        $templating = $this->getContainer()->get('templating');
-
-        $timeCards = $timeCardrepository->findForLastWeek();
+        $timeCards = $this->timeCardrepository->findForLastWeek();
         $projects = array();
         foreach ($timeCards as $timeCard) {
             $project = $timeCard->getProjectName();
@@ -51,6 +71,6 @@ class GenerateWeeklyReportCommand extends ContainerAwareCommand
         $view = 'TempoSimpleSpaghettiBundle:Report:weekly.md.twig';
         $parameters = array('projects' => $projects);
 
-        $output->writeln($templating->render($view, $parameters));
+        $output->writeln($this->templating->render($view, $parameters));
     }
 }

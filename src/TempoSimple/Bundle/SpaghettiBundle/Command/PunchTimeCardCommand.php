@@ -11,15 +11,32 @@
 
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Templating\EngineInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCard;
 
-class PunchTimeCardCommand extends ContainerAwareCommand
+class PunchTimeCardCommand extends Command
 {
+    /** @var TimeCardRepository */
+    private $timeCardRepository;
+
+    /**
+     * @param TimeCardRepository $timeCardRepository
+     */
+    public function __construct(
+        TimeCardRepository $timeCardrepository
+    )
+    {
+        $this->timeCardrepository = $timeCardrepository;
+
+        parent::__construct();
+    }
+
     /** {@inheritdoc} */
     protected function configure()
     {
@@ -44,8 +61,6 @@ class PunchTimeCardCommand extends ContainerAwareCommand
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
-
         $timeCard = new TimeCard(
             $input->getOption('project'),
             $input->getArgument('task'),
@@ -55,6 +70,6 @@ class PunchTimeCardCommand extends ContainerAwareCommand
             $input->getOption('description')
         );
 
-        $timeCardrepository->insert($timeCard);
+        $this->timeCardrepository->insert($timeCard);
     }
 }

@@ -21,7 +21,19 @@ class GenerateDailyReportCommandTest extends CommandTestCase
     {
         $parameters = array();
 
-        $this->givenThisCommand(new GenerateDailyReportCommand());
+        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
+        $timeCardRepository->findForDate(date('Y-m-d'))->willReturn(array());
+
+        $templatingClass = 'Symfony\Component\Templating\EngineInterface';
+        $templating = $this->prophet->prophesize($templatingClass);
+
+        $command = new GenerateDailyReportCommand(
+            $timeCardRepository->reveal(),
+            $templating->reveal()
+        );
+
+        $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);
         $this->thenItShouldSuceed();
     }

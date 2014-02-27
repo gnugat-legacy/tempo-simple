@@ -21,7 +21,19 @@ class GenerateBillableReportCommandTest extends CommandTestCase
     {
         $parameters = array();
 
-        $this->givenThisCommand(new GenerateBillableReportCommand());
+        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
+        $timeCardRepository->findBillable(date('Y-m'), 'Project 1')->willReturn(array());
+
+        $templatingClass = 'Symfony\Component\Templating\EngineInterface';
+        $templating = $this->prophet->prophesize($templatingClass);
+
+        $command = new GenerateBillableReportCommand(
+            $timeCardRepository->reveal(),
+            $templating->reveal()
+        );
+
+        $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);
         $this->thenItShouldSuceed();
     }

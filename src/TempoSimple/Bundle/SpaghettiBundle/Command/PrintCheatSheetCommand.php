@@ -11,12 +11,28 @@
 
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Templating\EngineInterface;
 
-class PrintCheatSheetCommand extends ContainerAwareCommand
+class PrintCheatSheetCommand extends Command
 {
+    /** @var EngineInterface */
+    private $templating;
+
+    /**
+     * @param EngineInterface $templating
+     */
+    public function __construct(
+        EngineInterface $templating
+    )
+    {
+        $this->templating = $templating;
+
+        parent::__construct();
+    }
+
     /** {@inheritdoc} */
     protected function configure()
     {
@@ -27,10 +43,8 @@ class PrintCheatSheetCommand extends ContainerAwareCommand
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $templating = $this->getContainer()->get('templating');
-
         $view = 'TempoSimpleSpaghettiBundle::cheat-sheet.md.twig';
 
-        $output->writeln($templating->render($view));
+        $output->writeln($this->templating->render($view));
     }
 }
