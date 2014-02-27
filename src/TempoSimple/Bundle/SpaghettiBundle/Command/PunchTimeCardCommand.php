@@ -25,14 +25,20 @@ class PunchTimeCardCommand extends Command
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
+    /** @var string */
+    private $defaultProject;
+
     /**
      * @param TimeCardRepository $timeCardRepository
+     * @param string             $defaultProject
      */
     public function __construct(
-        TimeCardRepository $timeCardrepository
+        TimeCardRepository $timeCardrepository,
+        $defaultProject
     )
     {
         $this->timeCardrepository = $timeCardrepository;
+        $this->defaultProject = $defaultProject;
 
         parent::__construct();
     }
@@ -48,7 +54,7 @@ class PunchTimeCardCommand extends Command
         $this->addArgument('end-hour', InputArgument::REQUIRED, 'Format: H:i (e.g. 18:15)');
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED,
-            'What project are you working for?', 'Project 1'
+            'What project are you working for?', $this->defaultProject
         );
         $this->addOption('description', '-D', InputOption::VALUE_REQUIRED,
             'What did you do?', ''

@@ -21,11 +21,14 @@ class PrintCheatSheetCommandTest extends CommandTestCase
     {
         $parameters = array();
 
+        $defaultProject = 'Project 1';
+
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
 
         $command = new PrintCheatSheetCommand(
-            $templating->reveal()
+            $templating->reveal(),
+            $defaultProject
         );
 
         $this->givenThisCommand($command);

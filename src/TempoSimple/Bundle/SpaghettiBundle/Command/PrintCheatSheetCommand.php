@@ -21,14 +21,20 @@ class PrintCheatSheetCommand extends Command
     /** @var EngineInterface */
     private $templating;
 
+    /** @var string */
+    private $defaultProject;
+
     /**
      * @param EngineInterface $templating
+     * @param string          $defaultProject
      */
     public function __construct(
-        EngineInterface $templating
+        EngineInterface $templating,
+        $defaultProject
     )
     {
         $this->templating = $templating;
+        $this->defaultProject = $defaultProject;
 
         parent::__construct();
     }
@@ -44,7 +50,10 @@ class PrintCheatSheetCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $view = 'TempoSimpleSpaghettiBundle::cheat-sheet.md.twig';
+        $parameters = array(
+            'defaultProject' => $this->defaultProject,
+        );
 
-        $output->writeln($this->templating->render($view));
+        $output->writeln($this->templating->render($view, $parameters));
     }
 }

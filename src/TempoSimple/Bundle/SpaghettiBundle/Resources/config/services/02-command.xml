@@ -9,6 +9,7 @@
         >
             <argument type="service" id="tempo_simple_spaghetti.time_card_reporitory" />
             <argument type="service" id="templating" />
+            <argument>%default_project%</argument>
 
             <tag name="console.command" />
         </service>
@@ -35,6 +36,7 @@
             class="TempoSimple\Bundle\SpaghettiBundle\Command\PrintCheatSheetCommand"
         >
             <argument type="service" id="templating" />
+            <argument>%default_project%</argument>
 
             <tag name="console.command" />
         </service>
@@ -43,6 +45,7 @@
             class="TempoSimple\Bundle\SpaghettiBundle\Command\PunchTimeCardCommand"
         >
             <argument type="service" id="tempo_simple_spaghetti.time_card_reporitory" />
+            <argument>%default_project%</argument>
 
             <tag name="console.command" />
         </service>

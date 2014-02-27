@@ -29,17 +29,23 @@ class GenerateBillableReportCommand extends Command
     /** @var EngineInterface */
     private $templating;
 
+    /** @var string */
+    private $defaultProject;
+
     /**
      * @param TimeCardRepository $timeCardrepository
      * @param EngineInterface    $templating
+     * @param string             $defaultProject
      */
     public function __construct(
         TimeCardRepository $timeCardrepository,
-        EngineInterface $templating
+        EngineInterface $templating,
+        $defaultProject
     )
     {
         $this->timeCardrepository = $timeCardrepository;
         $this->templating = $templating;
+        $this->defaultProject = $defaultProject;
 
         parent::__construct();
     }
@@ -51,7 +57,7 @@ class GenerateBillableReportCommand extends Command
         $this->setAliases(array('billable'));
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED, 'The project',
-            'Project 1'
+            $this->defaultProject
         );
         $this->addOption('month', '-m', InputOption::VALUE_REQUIRED,
             'Format: Y-m (e.g. 2014-01)', date('Y-m')

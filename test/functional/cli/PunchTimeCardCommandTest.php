@@ -25,11 +25,14 @@ class PunchTimeCardCommandTest extends CommandTestCase
             'end-hour' => '08:00',
         );
 
+        $defaultProject = 'Project 1';
+
         $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
         $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
 
         $command = new PunchTimeCardCommand(
-            $timeCardRepository->reveal()
+            $timeCardRepository->reveal(),
+            $defaultProject
         );
 
         $this->givenThisCommand($command);
