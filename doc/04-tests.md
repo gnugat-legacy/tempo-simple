@@ -19,6 +19,12 @@ Specification tests can be run using the following command:
 Specification tests describes how a class should behave. It's similar to unit
 tests, but with self explicit names for test methods.
 
+To generate the specification, use the following command:
+
+    vendor/bin/phpspec --config=app desc 'Acme\DemoBundle\AcmeDemoBundle'
+
+The `bin/descripter.sh` script helps you with that.
+
 ## Next readings
 
 * [technical debt](05-technical-debt.md)

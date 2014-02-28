@@ -1,54 +1,90 @@
 # Usage
 
-TempoSimple is a command line utility. You can run the command to get help:
+**Note**: For now, there's only a Command Line Interface. Soon a web interface
+should be available, be patient :) .
 
-    php app/console --env=prod <command> -h
+A cheat sheet is available to help you on:
 
-I advise you to create an alias (ts like TempoSimple):
+* the available commands
+* their arguments
+* time formats
+* current default settings
+
+To print it, simply run the console without any arguments:
+
+    php app/console
+
+I advise you to create an alias (`ts` like TempoSimple):
 
     alias ts='php app/console --env=prod'
 
-**Note**: For development purpose, use `php app/console` instead.
+To get more help on each commands, run `ts <command> -h`
 
 ## Punching time cards
 
-To enter a new record of your time spent on a project's task, run the following
-command:
+Here are some situation examples to help you understand the `punch` command.
 
-    ts punch -p='Project' '#4423 Task' '09:00' '09:30'
+## One task during the whole day
 
-You can optionnaly add a description or a date:
+Let's say you had the following day:
 
-    ts punch -p='Project' '#4423 Task' '09:00' '09:30' -D='description' -d='2014-02-14'
+1. you start at 9 o'clock and stop at noon
+2. then you have lunch until 1 o'clock
+3. finally you continue to work until 6 o'clock
 
-## Generate a daily report
+To record the time spent, you'll run:
 
-Is this the end of the day? Then generate a daily report:
+    ts punch '#4423 - hard task' '12:00'
+    ts punch '#4423 - hard task' '18:00'
+
+That's it! TempoSimple will have guessed the followings:
+
+* the day's date (today)
+* the project, based on the one set in the configuration
+* the morning's start hour (9 o'clock)
+* the afternoon's start hour (if you finish at noon, the start hour is 1 o'clock)
+
+### Many sessions in one task
+
+Generally you have sub-tasks in your tasks. You can micro manage your time spent
+on these by punching time cards and adding a description:
+
+    ts punch '#1337 - task with sub-tasks' '10:00' -D 'sub-task 1' -S '09:30'
+    ts punch '#1337 - task with sub-tasks' '12:00' -D 'sub-task 2'
+    ts punch '#1337 - task with sub-tasks' '13:30' -D 'sub-task 2'
+    ts punch '#1337 - task with sub-tasks' '18:00' -D 'sub-task 3'
+
+As you can see, we started our day at half past 9 instead of 9 o'clock, so we
+used the `-S` (or `--start-hour`) option.
+
+You can put anything in the `-D` (or `--description`) option: the sub task
+title, or precisions on what you exactly did.
+
+## Reports
+
+Usually, you would print a daily report at the end of the day:
 
     ts daily
 
-Did you forgot to send yesterday's daily report? Don't panic! You can specify
-the date of the daily report you want to generate:
+But if for some reason you forgot to, you can still set a day option:
 
-    ts daily -d='2014-02-13'
+    ts daily -d '2014-02-28'
 
-## Generate a weekly report
-
-This is monday morning, and you can't attend to the weekly stand up? Generate
-a weekly report:
+Weekly reports are generally sent on monday mornings:
 
     ts weekly
 
-## Generate a billable activity report
+And at the end of the month, you can report the number of working days (8 hours
+= 1 working day) for each task of the project to your manager:
 
-Your project manager needs you to give how much days each tasks took this month?
-Generate a billable report:
+    ts billable
 
-    ts billable 'Project'
+Use the `-p` (or `--project`) option to set the project you want.
 
-You need to generate one for last month? Use the `month` option:
+## Configuration
 
-    ts billable 'Porject' -m='2014-01'
+In order to change the default project or other configuration parameters, you
+need to edit the `app/config/parameters.yml` file.
 
 ## Next readings
 

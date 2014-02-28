@@ -1,48 +1,46 @@
 # Installation
 
-The installation steps described in this file are followed by the
-`bin/installer.sh` script.
+Quickly install TempoSimple using this command:
+
+    curl -sS https://raw.github.com/gnugat/tempo-simple/master/bin/installer.sh | sh
+
+You want to know what's behind this script? Then read on.
 
 ## 1. Downloading
 
-In order to install the project, you need to:
-
-Download the project using git (this will allow you to run `git pull` to get the
-newest updates):
+In order to install the project, the script download the project using git
+(allowing you to run `git pull` to get the newest updates):
 
     git clone https://github.com/gnugat/tempo-simple.git
     cd tempo-simple
 
-Download [Composer](http://getcomposer.org/):
+Then it will download [Composer](http://getcomposer.org/):
 
     echo '[curl] Getting Composer, the PHP dependency manager'
     curl -sS https://getcomposer.org/installer | php
 
-Download the project's dependencies using Composer:
+Finally it will download the project's dependencies using Composer:
 
     echo '[composer] Downloading the dependencies'
     php composer.phar install --no-dev --optimize-autoloader
 
+**Note**: at the end of the download, Composer will ask you some configuration
+questions.
+
 ### For development purpose
 
-To install the project for development purpose, follow the exact same steps
-as above except for the composer one:
+To install the project for development purpose, you should install the
+development dependencies using Composer:
 
     php composer.phar install
 
 ## 2. Database
 
-Create the database:
+Having the sources isn't enough. The script will take care of creating the
+database for you:
 
-    php app/console --env=prod doctrine:database:create
-    php app/console --env=prod doctrine:schema:create
-
-### For test purpose
-
-To install the project for test purpose:
-
-    php app/console --env=test doctrine:database:create
-    php app/console --env=test doctrine:schema:create
+    php app/console doctrine:database:create
+    php app/console doctrine:schema:create
 
 ## Next readings
 

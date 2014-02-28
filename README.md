@@ -19,9 +19,9 @@ Read more about this project in [its introduction](doc/01-introduction.md).
     [x] generate a billable report
     [ ] generate an activity report
 
-    [ ] context management (linking a given day to a specific project)
-
-Find out how to use it with the [usage guide](doc/03-usage.md).
+    [x] default project
+    [ ] project planned
+    [x] default start hour
 
 ## Installation
 
@@ -29,8 +29,28 @@ To download and install this project, run the following command:
 
     curl -sS https://raw.github.com/gnugat/tempo-simple/master/bin/installer.sh | sh
 
+Then create an alias: `alias ts='php app/console --env=prod'`
+
 Learn more about the steps followed by the script by reading its
 [documentation](doc/02-installation.md).
+
+## Usage
+
+You finished a session? Punch a new time card:
+
+    ts punch '#4423 - Task with helpful title' '11:00'
+
+You need to generate reports? Go for it:
+
+    ts daily
+    ts weekly
+    ts billable
+
+And if you're lost in the shell, simply ask for help:
+
+    ts
+
+Find out how to use it with the [usage guide](doc/03-usage.md).
 
 ## Further documentation
 
