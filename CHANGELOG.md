@@ -1,5 +1,20 @@
 # Changes between versions
 
+## 0.2.0: helpful context
+
+* print a helpful cheat sheet with the default command
+* default project in configuration
+* default morning's start hour
+* default afternoon' start hour
+* start hour guessed from the last end hour
+* documentation improvements
+* support of PHP version 5.3.3
+
+### Backward Compatibility Breaks
+
+The `punch`'s `start-hour` argument became a simple option (with helpful default
+values).
+
 ## 0.1.1: Refactoring session 1
 
 * creation of the TimeTracking Domain
