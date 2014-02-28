@@ -23,10 +23,14 @@ class PrintCheatSheetCommandTest extends CommandTestCase
 
         $defaultProject = 'Project 1';
 
+        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
+
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
 
         $command = new PrintCheatSheetCommand(
+            $timeCardRepository->reveal(),
             $templating->reveal(),
             $defaultProject
         );

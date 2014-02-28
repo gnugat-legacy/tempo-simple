@@ -15,9 +15,13 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 
 class PrintCheatSheetCommand extends Command
 {
+    /** @var TimeCardRepository */
+    private $timeCardRepository;
+
     /** @var EngineInterface */
     private $templating;
 
@@ -25,14 +29,17 @@ class PrintCheatSheetCommand extends Command
     private $defaultProject;
 
     /**
+     * @param TimeCardRepository $timeCardRepository
      * @param EngineInterface $templating
      * @param string          $defaultProject
      */
     public function __construct(
+        TimeCardRepository $timeCardRepository,
         EngineInterface $templating,
         $defaultProject
     )
     {
+        $this->timeCardRepository = $timeCardRepository;
         $this->templating = $templating;
         $this->defaultProject = $defaultProject;
 
@@ -49,9 +56,12 @@ class PrintCheatSheetCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $startHour = $this->timeCardRepository->findLastOne();
+
         $view = 'TempoSimpleSpaghettiBundle::cheat-sheet.md.twig';
         $parameters = array(
             'defaultProject' => $this->defaultProject,
+            'startHour' => $startHour
         );
 
         $output->writeln($this->templating->render($view, $parameters));

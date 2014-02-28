@@ -46,11 +46,12 @@ class PunchTimeCardCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
+        $startHour = $this->timeCardRepository->findLastOne();
+
         $this->setName('tempo-simple:punch:time-card');
         $this->setAliases(array('punch'));
 
         $this->addArgument('task', InputArgument::REQUIRED);
-        $this->addArgument('start-hour', InputArgument::REQUIRED, 'Format: H:i (e.g. 18:00)');
         $this->addArgument('end-hour', InputArgument::REQUIRED, 'Format: H:i (e.g. 18:15)');
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED,
@@ -62,6 +63,9 @@ class PunchTimeCardCommand extends Command
         $this->addOption('date', '-d', InputOption::VALUE_REQUIRED,
             'Format: Y-m-d (e.g. 2014-01-23)', date('Y-m-d')
         );
+        $this->addOption('start-hour', '-S', InputOption::VALUE_REQUIRED,
+            'Format: H:i (e.g. 18:00)', $startHour
+        );
     }
 
     /** {@inheritdoc} */
@@ -71,7 +75,7 @@ class PunchTimeCardCommand extends Command
             $input->getOption('project'),
             $input->getArgument('task'),
             $input->getOption('date'),
-            $input->getArgument('start-hour'),
+            $input->getOption('start-hour'),
             $input->getArgument('end-hour'),
             $input->getOption('description')
         );

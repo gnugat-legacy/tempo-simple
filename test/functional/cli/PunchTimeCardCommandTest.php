@@ -21,8 +21,7 @@ class PunchTimeCardCommandTest extends CommandTestCase
     {
         $parameters = array(
             'task' => 'task',
-            'start-hour' => '07:45',
-            'end-hour' => '08:00',
+            'end-hour' => '10:00',
         );
 
         $defaultProject = 'Project 1';
