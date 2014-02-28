@@ -12,6 +12,7 @@
 namespace TempoSimple\Test\Functional\Cli;
 
 use Prophecy\Prophet;
+use Prophecy\Exception\Prediction\PredictionException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -27,6 +28,21 @@ class CommandTestCase extends WebTestCase
     protected function setUp()
     {
         $this->prophet = new Prophet();
+    }
+
+    protected function tearDown()
+    {
+        $this->prophet->checkPredictions();
+        $this->prophet = null;
+    }
+
+    protected function onNotSuccessfulTest(\Exception $e)
+    {
+        if ($e instanceof PredictionException) {
+            $e = new \PHPUnit_Framework_AssertionFailedError($e->getMessage(), $e->getCode(), $e);
+        }
+
+        return parent::onNotSuccessfulTest($e);
     }
 
     /**
