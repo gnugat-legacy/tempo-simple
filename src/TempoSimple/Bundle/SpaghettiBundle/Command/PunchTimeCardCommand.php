@@ -11,27 +11,51 @@
 
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Templating\EngineInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCard;
 
-class PunchTimeCardCommand extends ContainerAwareCommand
+class PunchTimeCardCommand extends Command
 {
+    /** @var TimeCardRepository */
+    private $timeCardRepository;
+
+    /** @var string */
+    private $defaultProject;
+
+    /**
+     * @param TimeCardRepository $timeCardRepository
+     * @param string             $defaultProject
+     */
+    public function __construct(
+        TimeCardRepository $timeCardRepository,
+        $defaultProject
+    )
+    {
+        $this->timeCardRepository = $timeCardRepository;
+        $this->defaultProject = $defaultProject;
+
+        parent::__construct();
+    }
+
     /** {@inheritdoc} */
     protected function configure()
     {
+        $startHour = $this->timeCardRepository->findLastOne();
+
         $this->setName('tempo-simple:punch:time-card');
         $this->setAliases(array('punch'));
 
         $this->addArgument('task', InputArgument::REQUIRED);
-        $this->addArgument('start-hour', InputArgument::REQUIRED, 'Format: H:i (e.g. 18:00)');
         $this->addArgument('end-hour', InputArgument::REQUIRED, 'Format: H:i (e.g. 18:15)');
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED,
-            'What project are you working for?', 'Project 1'
+            'What project are you working for?', $this->defaultProject
         );
         $this->addOption('description', '-D', InputOption::VALUE_REQUIRED,
             'What did you do?', ''
@@ -39,22 +63,23 @@ class PunchTimeCardCommand extends ContainerAwareCommand
         $this->addOption('date', '-d', InputOption::VALUE_REQUIRED,
             'Format: Y-m-d (e.g. 2014-01-23)', date('Y-m-d')
         );
+        $this->addOption('start-hour', '-S', InputOption::VALUE_REQUIRED,
+            'Format: H:i (e.g. 18:00)', $startHour
+        );
     }
 
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
-
         $timeCard = new TimeCard(
             $input->getOption('project'),
             $input->getArgument('task'),
             $input->getOption('date'),
-            $input->getArgument('start-hour'),
+            $input->getOption('start-hour'),
             $input->getArgument('end-hour'),
             $input->getOption('description')
         );
 
-        $timeCardrepository->insert($timeCard);
+        $this->timeCardRepository->insert($timeCard);
     }
 }

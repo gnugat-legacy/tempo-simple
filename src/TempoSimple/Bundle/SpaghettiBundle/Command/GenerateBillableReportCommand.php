@@ -11,16 +11,45 @@
 
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Templating\EngineInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 use TempoSimple\Domain\TimeTracking\Project;
 use TempoSimple\Domain\TimeTracking\Task;
 use TempoSimple\Domain\TimeTracking\TimeCard;
 
-class GenerateBillableReportCommand extends ContainerAwareCommand
+class GenerateBillableReportCommand extends Command
 {
+    /** @var TimeCardRepository */
+    private $timeCardRepository;
+
+    /** @var EngineInterface */
+    private $templating;
+
+    /** @var string */
+    private $defaultProject;
+
+    /**
+     * @param TimeCardRepository $timeCardRepository
+     * @param EngineInterface    $templating
+     * @param string             $defaultProject
+     */
+    public function __construct(
+        TimeCardRepository $timeCardRepository,
+        EngineInterface $templating,
+        $defaultProject
+    )
+    {
+        $this->timeCardRepository = $timeCardRepository;
+        $this->templating = $templating;
+        $this->defaultProject = $defaultProject;
+
+        parent::__construct();
+    }
+
     /** {@inheritdoc} */
     protected function configure()
     {
@@ -28,7 +57,7 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
         $this->setAliases(array('billable'));
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED, 'The project',
-            'Project 1'
+            $this->defaultProject
         );
         $this->addOption('month', '-m', InputOption::VALUE_REQUIRED,
             'Format: Y-m (e.g. 2014-01)', date('Y-m')
@@ -38,15 +67,12 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $timeCardrepository = $this->getContainer()->get('tempo_simple_spaghetti.time_card_reporitory');
-        $templating = $this->getContainer()->get('templating');
-
         $month = $input->getOption('month');
         $projectName = $input->getOption('project');
 
         $project = new Project($projectName);
 
-        $timeCards = $timeCardrepository->findBillable($month, $projectName);
+        $timeCards = $this->timeCardRepository->findBillable($month, $projectName);
         foreach ($timeCards as $timeCard) {
             $taskTitle = $timeCard->getTaskTitle();
             $startHour = $timeCard->getStartHour();
@@ -65,6 +91,6 @@ class GenerateBillableReportCommand extends ContainerAwareCommand
         $view = 'TempoSimpleSpaghettiBundle:Report:billable.md.twig';
         $parameters = array('tasks' => $project->getTasks());
 
-        $output->writeln($templating->render($view, $parameters));
+        $output->writeln($this->templating->render($view, $parameters));
     }
 }

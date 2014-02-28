@@ -21,7 +21,21 @@ class PrintCheatSheetCommandTest extends CommandTestCase
     {
         $parameters = array();
 
-        $this->givenThisCommand(new PrintCheatSheetCommand());
+        $defaultProject = 'Project 1';
+
+        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
+
+        $templatingClass = 'Symfony\Component\Templating\EngineInterface';
+        $templating = $this->prophet->prophesize($templatingClass);
+
+        $command = new PrintCheatSheetCommand(
+            $timeCardRepository->reveal(),
+            $templating->reveal(),
+            $defaultProject
+        );
+
+        $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);
         $this->thenItShouldSuceed();
     }

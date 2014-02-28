@@ -98,4 +98,31 @@ class TimeCardRepository extends EntityRepository
 
         return $query->getResult();
     }
+
+    /** @return TimeCard */
+    public function findLastOne()
+    {
+        $today = date('Y-m-d');
+        $query = $this->createQueryBuilder('t')
+            ->where('t.date = :today')
+
+            ->orderBy('t.endHour', 'DESC')
+
+            ->setParameter('today', $today)
+
+            ->setMaxResults(1)
+
+            ->getQuery()
+        ;
+
+        $timeCards = $query->getResult();
+        if (empty($timeCards)) {
+            return '09:00';
+        }
+        $endHour = $timeCards[0]->getEndHour();
+        if ('12:00' === $endHour) {
+            return '13:00';
+        }
+        return $endHour;
+    }
 }

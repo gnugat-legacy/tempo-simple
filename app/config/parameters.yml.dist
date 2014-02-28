@@ -8,3 +8,5 @@ parameters:
 
     locale: en
     secret: ChangeMePlease
+
+    default_project: Project 1

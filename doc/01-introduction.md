@@ -1,15 +1,27 @@
 # Introduction
 
-TempoSimple is a time tracking software allowing you to:
+If you have:
 
-* enter the time spent on tasks
-* generate reports out of it
+* a daily report to send at the end of the day
+* a weekly report to send every monday morning
+* a report of the number of working days spent on each tasks at the end of the month
+* an activity report to print at the end of the month
 
-## What's the point?
+Then TempoSimple can help you: when you finish a task, punch a new time card
+which will state:
 
-Those tasks (time tacking and report writting) are done manually anyway, and
-they take time which could be spent doing actual work. Automate the boring
-stuff!
+* the day
+* the project
+* the task
+* the start hour
+* the end hour
+* a description
+
+You think those 6 information are too much to ask? Don't panic! TempoSimple will
+guess almost everything.
+
+Take a look at the [usage documentation](03-usage.md) in order to have a grasp
+of TempoSimple's power.
 
 ## Next readings
 

@@ -21,11 +21,20 @@ class PunchTimeCardCommandTest extends CommandTestCase
     {
         $parameters = array(
             'task' => 'task',
-            'start-hour' => '07:45',
-            'end-hour' => '08:00',
+            'end-hour' => '10:00',
         );
 
-        $this->givenThisCommand(new PunchTimeCardCommand());
+        $defaultProject = 'Project 1';
+
+        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
+
+        $command = new PunchTimeCardCommand(
+            $timeCardRepository->reveal(),
+            $defaultProject
+        );
+
+        $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);
         $this->thenItShouldSuceed();
     }

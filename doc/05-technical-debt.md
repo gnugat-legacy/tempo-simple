@@ -14,7 +14,11 @@ it  and ship it again!
 ## Directories
 
 * the spaghetti bundle should be split up:
-  + create a cli bundle
+  + rename `src/Bundle` into `src/ApplicationLayer` directory:
+    - create a cli bundle
+  + rename `src/Domain` into `src/DomainModel`
+  + create a `src/DataSource` directory:
+    - create a time tracking bundle
 
 ## Commands
 

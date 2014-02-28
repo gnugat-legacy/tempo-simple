@@ -21,7 +21,19 @@ class GenerateWeeklyReportCommandTest extends CommandTestCase
     {
         $parameters = array();
 
-        $this->givenThisCommand(new GenerateWeeklyReportCommand());
+        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
+        $timeCardRepository->findForLastWeek()->willReturn(array());
+
+        $templatingClass = 'Symfony\Component\Templating\EngineInterface';
+        $templating = $this->prophet->prophesize($templatingClass);
+
+        $command = new GenerateWeeklyReportCommand(
+            $timeCardRepository->reveal(),
+            $templating->reveal()
+        );
+
+        $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);
         $this->thenItShouldSuceed();
     }

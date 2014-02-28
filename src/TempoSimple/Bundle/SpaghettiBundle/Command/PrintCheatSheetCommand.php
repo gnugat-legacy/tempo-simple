@@ -11,12 +11,41 @@
 
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Templating\EngineInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 
-class PrintCheatSheetCommand extends ContainerAwareCommand
+class PrintCheatSheetCommand extends Command
 {
+    /** @var TimeCardRepository */
+    private $timeCardRepository;
+
+    /** @var EngineInterface */
+    private $templating;
+
+    /** @var string */
+    private $defaultProject;
+
+    /**
+     * @param TimeCardRepository $timeCardRepository
+     * @param EngineInterface $templating
+     * @param string          $defaultProject
+     */
+    public function __construct(
+        TimeCardRepository $timeCardRepository,
+        EngineInterface $templating,
+        $defaultProject
+    )
+    {
+        $this->timeCardRepository = $timeCardRepository;
+        $this->templating = $templating;
+        $this->defaultProject = $defaultProject;
+
+        parent::__construct();
+    }
+
     /** {@inheritdoc} */
     protected function configure()
     {
@@ -27,10 +56,14 @@ class PrintCheatSheetCommand extends ContainerAwareCommand
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $templating = $this->getContainer()->get('templating');
+        $startHour = $this->timeCardRepository->findLastOne();
 
         $view = 'TempoSimpleSpaghettiBundle::cheat-sheet.md.twig';
+        $parameters = array(
+            'defaultProject' => $this->defaultProject,
+            'startHour' => $startHour
+        );
 
-        $output->writeln($templating->render($view));
+        $output->writeln($this->templating->render($view, $parameters));
     }
 }

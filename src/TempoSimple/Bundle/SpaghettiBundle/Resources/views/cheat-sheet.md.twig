@@ -2,11 +2,12 @@
 
 ## Aliases
 
-    alias ts='php app/console -e=prod'
+    alias ts='php app/console'
 
 ## Punch new time card
 
-    ts punch task start-hour end-hour -D description -p project
+    ts punch task end-hour
+    ts punch task end-hour -S start-hour -D description -p project -d day
 
 ## Reports
 
@@ -15,11 +16,13 @@
 
     ts weekly
 
-    ts billable -p project
+    ts billable
     ts billable -p project -m month
 
-## Time formats
+## Options, default values and time formats
 
-* hour: `H:i` (e.g. `09:00`, `13:45`)
-* day: `Y-m-d` (e.g. `1989-01-25`)
-* month: `Y-m` (e.g. `2004-09`)
+    -d --day         {{ 'now'|date('Y-m-d') }} Format: `Y-m-d` (e.g. `1989-01-25`)
+    -D --description
+    -m --month       {{ 'now'|date('Y-m') }}    Format: `Y-m` (e.g. `2004-09`)
+    -p --project     {{ defaultProject }}
+    -S --start-hour  {{ startHour }}      Format: `H:i` (e.g. `09:00`, `13:45`)
