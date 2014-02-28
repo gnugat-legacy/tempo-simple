@@ -21,21 +21,21 @@ use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 class GenerateDailyReportCommand extends Command
 {
     /** @var TimeCardRepository */
-    private $timeCardrepository;
+    private $timeCardRepository;
 
     /** @var EngineInterface */
     private $templating;
 
     /**
-     * @param TimeCardRepository $timeCardrepository
+     * @param TimeCardRepository $timeCardRepository
      * @param EngineInterface    $templating
      */
     public function __construct(
-        TimeCardRepository $timeCardrepository,
+        TimeCardRepository $timeCardRepository,
         EngineInterface $templating
     )
     {
-        $this->timeCardrepository = $timeCardrepository;
+        $this->timeCardRepository = $timeCardRepository;
         $this->templating = $templating;
 
         parent::__construct();
@@ -57,7 +57,7 @@ class GenerateDailyReportCommand extends Command
     {
         $date = $input->getOption('date');
 
-        $timeCards = $this->timeCardrepository->findForDate($date);
+        $timeCards = $this->timeCardRepository->findForDate($date);
         $tasks = array();
         foreach ($timeCards as $timeCard) {
             $task = $timeCard->getTaskTitle();

@@ -24,7 +24,7 @@ use TempoSimple\Domain\TimeTracking\TimeCard;
 class GenerateBillableReportCommand extends Command
 {
     /** @var TimeCardRepository */
-    private $timeCardrepository;
+    private $timeCardRepository;
 
     /** @var EngineInterface */
     private $templating;
@@ -33,17 +33,17 @@ class GenerateBillableReportCommand extends Command
     private $defaultProject;
 
     /**
-     * @param TimeCardRepository $timeCardrepository
+     * @param TimeCardRepository $timeCardRepository
      * @param EngineInterface    $templating
      * @param string             $defaultProject
      */
     public function __construct(
-        TimeCardRepository $timeCardrepository,
+        TimeCardRepository $timeCardRepository,
         EngineInterface $templating,
         $defaultProject
     )
     {
-        $this->timeCardrepository = $timeCardrepository;
+        $this->timeCardRepository = $timeCardRepository;
         $this->templating = $templating;
         $this->defaultProject = $defaultProject;
 
@@ -72,7 +72,7 @@ class GenerateBillableReportCommand extends Command
 
         $project = new Project($projectName);
 
-        $timeCards = $this->timeCardrepository->findBillable($month, $projectName);
+        $timeCards = $this->timeCardRepository->findBillable($month, $projectName);
         foreach ($timeCards as $timeCard) {
             $taskTitle = $timeCard->getTaskTitle();
             $startHour = $timeCard->getStartHour();

@@ -20,21 +20,21 @@ use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 class GenerateWeeklyReportCommand extends Command
 {
     /** @var TimeCardRepository */
-    private $timeCardrepository;
+    private $timeCardRepository;
 
     /** @var EngineInterface */
     private $templating;
 
     /**
-     * @param TimeCardRepository $timeCardrepository
+     * @param TimeCardRepository $timeCardRepository
      * @param EngineInterface    $templating
      */
     public function __construct(
-        TimeCardRepository $timeCardrepository,
+        TimeCardRepository $timeCardRepository,
         EngineInterface $templating
     )
     {
-        $this->timeCardrepository = $timeCardrepository;
+        $this->timeCardRepository = $timeCardRepository;
         $this->templating = $templating;
 
         parent::__construct();
@@ -50,7 +50,7 @@ class GenerateWeeklyReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $timeCards = $this->timeCardrepository->findForLastWeek();
+        $timeCards = $this->timeCardRepository->findForLastWeek();
         $projects = array();
         foreach ($timeCards as $timeCard) {
             $project = $timeCard->getProjectName();

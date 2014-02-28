@@ -33,11 +33,11 @@ class PunchTimeCardCommand extends Command
      * @param string             $defaultProject
      */
     public function __construct(
-        TimeCardRepository $timeCardrepository,
+        TimeCardRepository $timeCardRepository,
         $defaultProject
     )
     {
-        $this->timeCardrepository = $timeCardrepository;
+        $this->timeCardRepository = $timeCardRepository;
         $this->defaultProject = $defaultProject;
 
         parent::__construct();
@@ -76,6 +76,6 @@ class PunchTimeCardCommand extends Command
             $input->getOption('description')
         );
 
-        $this->timeCardrepository->insert($timeCard);
+        $this->timeCardRepository->insert($timeCard);
     }
 }
