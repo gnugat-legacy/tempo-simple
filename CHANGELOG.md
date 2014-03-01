@@ -1,5 +1,12 @@
 # Changes between versions
 
+## 0.2.1: Fix dependencies
+
+* removed AsseticBundle
+* removed SensioDistributionBundle
+* removed SensioFrameworkExtraBundle
+* changed console's environment from `dev` to `prod`
+
 ## 0.2.0: helpful context
 
 * print a helpful cheat sheet with the default command
