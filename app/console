@@ -20,7 +20,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Debug\Debug;
 
 $input = new ArgvInput();
-$env = $input->getParameterOption(array('--env', '-e'), 'dev');
+$env = $input->getParameterOption(array('--env', '-e'), 'prod');
 $debug = ($env !== 'prod');
 if ($debug) {
     Debug::enable();
