@@ -30,8 +30,8 @@ class PrintCheatSheetCommand extends Command
 
     /**
      * @param TimeCardRepository $timeCardRepository
-     * @param EngineInterface $templating
-     * @param string          $defaultProject
+     * @param EngineInterface    $templating
+     * @param string             $defaultProject
      */
     public function __construct(
         TimeCardRepository $timeCardRepository,
