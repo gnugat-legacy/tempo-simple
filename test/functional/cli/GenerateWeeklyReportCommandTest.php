@@ -21,7 +21,7 @@ class GenerateWeeklyReportCommandTest extends CommandTestCase
     {
         $parameters = array();
 
-        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
         $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
         $timeCardRepository->findForLastWeek()->willReturn(array());
 

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\Domain\TimeTracking\Project;
 use TempoSimple\Domain\TimeTracking\Task;
 use TempoSimple\Domain\TimeTracking\TimeCard;

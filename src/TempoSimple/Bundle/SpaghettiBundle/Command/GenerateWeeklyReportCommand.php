@@ -15,7 +15,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 
 class GenerateWeeklyReportCommand extends Command
 {
