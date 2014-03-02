@@ -123,6 +123,7 @@ class TimeCardRepository extends EntityRepository
         if ('12:00' === $endHour) {
             return '13:00';
         }
+
         return $endHour;
     }
 }

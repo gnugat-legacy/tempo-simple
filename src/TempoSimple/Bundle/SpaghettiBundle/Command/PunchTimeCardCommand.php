@@ -16,7 +16,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
 use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCard;
 
