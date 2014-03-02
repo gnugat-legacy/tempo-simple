@@ -113,6 +113,10 @@ A unit of time spent: 60 minutes make 1 working hour.
 A working hour is composed of quarters: increments are done by stages of 15
 minutes (0.25 working hours).
 
+## Next readings
+
+* [architecture](07-architecture.md)
+
 ## Previous readings
 
 * [introduction](01-introduction.md)
