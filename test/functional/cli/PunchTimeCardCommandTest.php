@@ -26,7 +26,7 @@ class PunchTimeCardCommandTest extends CommandTestCase
 
         $defaultProject = 'Project 1';
 
-        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
+        $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
         $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
 
         $command = new PunchTimeCardCommand(

@@ -9,14 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace TempoSimple\Bundle\SpaghettiBundle\Entity;
+namespace TempoSimple\DataSource\DoctrineBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table("time_card")
- * @ORM\Entity(repositoryClass = "TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository")
+ * @ORM\Entity(repositoryClass = "TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository")
  */
 class TimeCard
 {

@@ -16,8 +16,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCard;
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCard;
 
 class PunchTimeCardCommand extends Command
 {

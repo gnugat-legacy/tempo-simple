@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace TempoSimple\Bundle\SpaghettiBundle\Entity;
+namespace TempoSimple\DataSource\DoctrineBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
