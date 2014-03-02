@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace TempoSimple\Domain\TimeTracking;
+namespace TempoSimple\DomainModel\TimeTracking;
 
 class TimeCard
 {

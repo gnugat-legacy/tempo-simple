@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\TempoSimple\Domain\TimeTracking;
+namespace spec\TempoSimple\DomainModel\TimeTracking;
 
 use PhpSpec\ObjectBehavior;
-use TempoSimple\Domain\TimeTracking\Task;
+use TempoSimple\DomainModel\TimeTracking\Task;
 
 class ProjectSpec extends ObjectBehavior
 {
@@ -27,7 +27,7 @@ class ProjectSpec extends ObjectBehavior
         $this->hasTask($taskTitle)->shouldBe(false);
         $this->addTask($task);
         $this->hasTask($taskTitle)->shouldBe(true);
-        $this->getTask($taskTitle)->shouldHaveType('TempoSimple\\Domain\\TimeTracking\\Task');
+        $this->getTask($taskTitle)->shouldHaveType('TempoSimple\\DomainModel\\TimeTracking\\Task');
 
         $this->getTasks()->shouldBeArray();
         $this->getTasks()->shouldHaveCount(1);

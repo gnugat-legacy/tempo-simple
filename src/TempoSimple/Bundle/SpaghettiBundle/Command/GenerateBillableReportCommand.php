@@ -17,9 +17,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
-use TempoSimple\Domain\TimeTracking\Project;
-use TempoSimple\Domain\TimeTracking\Task;
-use TempoSimple\Domain\TimeTracking\TimeCard;
+use TempoSimple\DomainModel\TimeTracking\Project;
+use TempoSimple\DomainModel\TimeTracking\Task;
+use TempoSimple\DomainModel\TimeTracking\TimeCard;
 
 class GenerateBillableReportCommand extends Command
 {
