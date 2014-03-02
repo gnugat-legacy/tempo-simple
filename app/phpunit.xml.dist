@@ -5,7 +5,7 @@
     backupGlobals="false"
     colors="true"
     syntaxCheck="false"
-    bootstrap="bootstrap.php.cache">
+    bootstrap="autoload.php">
 
     <testsuites>
         <testsuite name="Functional Test Suite">

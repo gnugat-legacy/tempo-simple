@@ -46,7 +46,11 @@ class PunchTimeCardCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
-        $startHour = $this->timeCardRepository->findLastOne();
+        try {
+            $startHour = $this->timeCardRepository->findLastOne();
+        } catch (\Exception $e) {
+            $startHour = '09:00';
+        }
 
         $this->setName('tempo-simple:punch:time-card');
         $this->setAliases(array('punch'));

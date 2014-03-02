@@ -10,8 +10,5 @@
 /app/cache/*
 /app/logs/*
 
-# Build files
-/app/bootstrap.php.cache
-
 # Configuration files
 app/config/parameters.yml
