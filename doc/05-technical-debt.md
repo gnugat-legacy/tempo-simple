@@ -40,6 +40,7 @@ it  and ship it again!
 ## Next readings
 
 * [glossary](06-glossary.md)
+* [architecture](07-architecture.md)
 
 ## Previous readings
 

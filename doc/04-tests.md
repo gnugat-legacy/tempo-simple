@@ -29,6 +29,7 @@ The `bin/descripter.sh` script helps you with that.
 
 * [technical debt](05-technical-debt.md)
 * [glossary](06-glossary.md)
+* [architecture](07-architecture.md)
 
 ## Previous readings
 
