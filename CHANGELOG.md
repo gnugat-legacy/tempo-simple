@@ -1,5 +1,10 @@
 # Changes between versions
 
+## 0.2.2: Fix install
+
+* removed `app/bootstrap.php.cache` file
+* added check for database exceptions
+
 ## 0.2.1: Fix dependencies
 
 * removed AsseticBundle
