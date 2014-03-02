@@ -1,9 +1,9 @@
 <?php
 
-namespace spec\TempoSimple\Domain\TimeTracking;
+namespace spec\TempoSimple\DomainModel\TimeTracking;
 
 use PhpSpec\ObjectBehavior;
-use TempoSimple\Domain\TimeTracking\TimeCard;
+use TempoSimple\DomainModel\TimeTracking\TimeCard;
 
 class TaskSpec extends ObjectBehavior
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace spec\TempoSimple\Domain\TimeTracking;
+namespace spec\TempoSimple\DomainModel\TimeTracking;
 
 use PhpSpec\ObjectBehavior;
 
