@@ -80,10 +80,21 @@ class PunchTimeCardCommand extends Command
             $input->getArgument('task'),
             $input->getOption('date'),
             $input->getOption('start-hour'),
-            $input->getArgument('end-hour') ?: date('H:i'),
+            $input->getArgument('end-hour') ?: self::timeRoundByQuarter(),
             $input->getOption('description')
         );
 
         $this->timeCardRepository->insert($timeCard);
+    }
+
+    public static function timeRoundByQuarter()
+    {
+        $date = getdate();
+        
+        $roundedMinutes = $date['minutes'] % 15;
+        
+        $minutes = ($roundedMinutes > 7) ? $date['minutes'] + (15 - $roundedMinutes) : $date['minutes'] - $roundedMinutes;
+        
+        return $date['hours'].":".$minutes;
     }
 }
