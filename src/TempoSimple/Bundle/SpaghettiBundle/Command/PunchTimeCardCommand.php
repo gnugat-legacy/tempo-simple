@@ -56,7 +56,7 @@ class PunchTimeCardCommand extends Command
         $this->setAliases(array('punch'));
 
         $this->addArgument('task', InputArgument::REQUIRED);
-        $this->addArgument('end-hour', InputArgument::REQUIRED, 'Format: H:i (e.g. 18:15)');
+        $this->addArgument('end-hour', InputArgument::OPTIONAL, 'Format: H:i (e.g. 18:15)');
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED,
             'What project are you working for?', $this->defaultProject
@@ -80,7 +80,7 @@ class PunchTimeCardCommand extends Command
             $input->getArgument('task'),
             $input->getOption('date'),
             $input->getOption('start-hour'),
-            $input->getArgument('end-hour'),
+            $input->getArgument('end-hour') ?: date('H:i'),
             $input->getOption('description')
         );
 
