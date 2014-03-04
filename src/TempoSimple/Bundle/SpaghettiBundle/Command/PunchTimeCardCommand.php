@@ -56,7 +56,7 @@ class PunchTimeCardCommand extends Command
         $this->setAliases(array('punch'));
 
         $this->addArgument('task', InputArgument::REQUIRED);
-        $this->addArgument('end-hour', InputArgument::REQUIRED, 'Format: H:i (e.g. 18:15)');
+        $this->addArgument('end-hour', InputArgument::OPTIONAL, 'Format: H:i (e.g. 18:15)');
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED,
             'What project are you working for?', $this->defaultProject
@@ -80,10 +80,21 @@ class PunchTimeCardCommand extends Command
             $input->getArgument('task'),
             $input->getOption('date'),
             $input->getOption('start-hour'),
-            $input->getArgument('end-hour'),
+            $input->getArgument('end-hour') ?: self::timeRoundByQuarter(),
             $input->getOption('description')
         );
 
         $this->timeCardRepository->insert($timeCard);
+    }
+
+    public static function timeRoundByQuarter()
+    {
+        $date = getdate();
+        
+        $roundedMinutes = $date['minutes'] % 15;
+        
+        $minutes = ($roundedMinutes > 7) ? $date['minutes'] + (15 - $roundedMinutes) : $date['minutes'] - $roundedMinutes;
+        
+        return $date['hours'].":".$minutes;
     }
 }
