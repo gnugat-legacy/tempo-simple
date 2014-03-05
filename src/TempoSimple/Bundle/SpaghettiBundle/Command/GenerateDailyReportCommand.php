@@ -17,9 +17,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 
 class GenerateDailyReportCommand extends Command
 {
+    /** @var DateFactory */
+    private $dateFactory;
+
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
@@ -27,14 +31,17 @@ class GenerateDailyReportCommand extends Command
     private $templating;
 
     /**
+     * @param DateFactory        $dateFactory
      * @param TimeCardRepository $timeCardRepository
      * @param EngineInterface    $templating
      */
     public function __construct(
+        DateFactory $dateFactory,
         TimeCardRepository $timeCardRepository,
         EngineInterface $templating
     )
     {
+        $this->dateFactory = $dateFactory;
         $this->timeCardRepository = $timeCardRepository;
         $this->templating = $templating;
 
@@ -44,11 +51,13 @@ class GenerateDailyReportCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
+        $today = $this->dateFactory->today();
+
         $this->setName('tempo-simple:generate:daily-report');
         $this->setAliases(array('daily'));
 
         $this->addOption('date', '-d', InputOption::VALUE_REQUIRED,
-            'Format: Y-m-d (e.g. 2014-01-23)', date('Y-m-d')
+            'Format: Y-m-d (e.g. 2014-01-23)', $today->getDay()
         );
     }
 

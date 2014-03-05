@@ -20,9 +20,13 @@ use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\DomainModel\TimeTracking\Project;
 use TempoSimple\DomainModel\TimeTracking\Task;
 use TempoSimple\DomainModel\TimeTracking\TimeCard;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 
 class GenerateBillableReportCommand extends Command
 {
+    /** @var DateFactory */
+    private $dateFactory;
+
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
@@ -33,16 +37,19 @@ class GenerateBillableReportCommand extends Command
     private $defaultProject;
 
     /**
+     * @param DateFactory        $dateFactory
      * @param TimeCardRepository $timeCardRepository
      * @param EngineInterface    $templating
      * @param string             $defaultProject
      */
     public function __construct(
+        DateFactory $dateFactory,
         TimeCardRepository $timeCardRepository,
         EngineInterface $templating,
         $defaultProject
     )
     {
+        $this->dateFactory = $dateFactory;
         $this->timeCardRepository = $timeCardRepository;
         $this->templating = $templating;
         $this->defaultProject = $defaultProject;
@@ -53,6 +60,8 @@ class GenerateBillableReportCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
+        $today = $this->dateFactory->today();
+
         $this->setName('tempo-simple:generate:billable-report');
         $this->setAliases(array('billable'));
 
@@ -60,7 +69,7 @@ class GenerateBillableReportCommand extends Command
             $this->defaultProject
         );
         $this->addOption('month', '-m', InputOption::VALUE_REQUIRED,
-            'Format: Y-m (e.g. 2014-01)', date('Y-m')
+            'Format: Y-m (e.g. 2014-01)', $today->getMonth()
         );
     }
 

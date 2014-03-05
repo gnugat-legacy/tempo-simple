@@ -7,6 +7,7 @@
         <service id="tempo_simple_spaghetti.generate_billable_report_command"
             class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateBillableReportCommand"
         >
+            <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
             <argument type="service" id="templating" />
             <argument>%default_project%</argument>
@@ -17,6 +18,7 @@
         <service id="tempo_simple_spaghetti.generate_daily_report_command"
             class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateDailyReportCommand"
         >
+            <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
             <argument type="service" id="templating" />
 
@@ -26,6 +28,7 @@
         <service id="tempo_simple_spaghetti.generate_weekly_report_command"
             class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateWeeklyReportCommand"
         >
+            <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
             <argument type="service" id="templating" />
 
@@ -35,6 +38,7 @@
         <service id="tempo_simple_spaghetti.print_cheat_sheet_command"
             class="TempoSimple\Bundle\SpaghettiBundle\Command\PrintCheatSheetCommand"
         >
+            <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
             <argument type="service" id="templating" />
             <argument>%default_project%</argument>
@@ -45,6 +49,7 @@
         <service id="tempo_simple_spaghetti.punch_time_card_command"
             class="TempoSimple\Bundle\SpaghettiBundle\Command\PunchTimeCardCommand"
         >
+            <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
             <argument>%default_project%</argument>
 
