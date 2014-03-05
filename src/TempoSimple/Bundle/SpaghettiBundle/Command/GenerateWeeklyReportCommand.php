@@ -57,7 +57,12 @@ class GenerateWeeklyReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $timeCards = $this->timeCardRepository->findForLastWeek();
+        $dates = $this->dateFactory->lastWorkingWeek();
+        $lastWorkingWeek = array();
+        foreach ($dates as $date) {
+            $lastWorkingWeek[] = $date->getDay();
+        }
+        $timeCards = $this->timeCardRepository->findForDays($lastWorkingWeek);
         $projects = array();
         foreach ($timeCards as $timeCard) {
             $project = $timeCard->getProjectName();

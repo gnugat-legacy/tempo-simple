@@ -63,12 +63,14 @@ class PrintCheatSheetCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $startHour = $this->timeCardRepository->findLastOne();
+        $today = $this->dateFactory->today();
+        $startHour = $this->timeCardRepository->findLastOneForDay($today->getDay());
 
         $view = 'TempoSimpleSpaghettiBundle::cheat-sheet.md.twig';
         $parameters = array(
             'defaultProject' => $this->defaultProject,
-            'startHour' => $startHour
+            'startHour' => $startHour,
+            'today' => $today,
         );
 
         $output->writeln($this->templating->render($view, $parameters));

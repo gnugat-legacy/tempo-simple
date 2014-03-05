@@ -81,7 +81,7 @@ class GenerateBillableReportCommand extends Command
 
         $project = new Project($projectName);
 
-        $timeCards = $this->timeCardRepository->findBillable($month, $projectName);
+        $timeCards = $this->timeCardRepository->findForMonthAndProject($month, $projectName);
         foreach ($timeCards as $timeCard) {
             $taskTitle = $timeCard->getTaskTitle();
             $startHour = $timeCard->getStartHour();
