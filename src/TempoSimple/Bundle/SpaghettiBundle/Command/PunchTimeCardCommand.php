@@ -54,7 +54,7 @@ class PunchTimeCardCommand extends Command
     {
         $today = $this->dateFactory->today();
         try {
-            $startHour = $this->timeCardRepository->findLastOne();
+            $startHour = $this->timeCardRepository->findLastOneForDay($today->getDay());
         } catch (\Exception $e) {
             $startHour = '09:00';
         }

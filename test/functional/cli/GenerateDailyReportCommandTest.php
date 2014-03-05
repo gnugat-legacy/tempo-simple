@@ -33,7 +33,7 @@ class GenerateDailyReportCommandTest extends CommandTestCase
 
         $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
         $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
-        $timeCardRepository->findForDate(date('Y-m-d'))->willReturn(array());
+        $timeCardRepository->findForDay(self::DAY)->willReturn(array());
 
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);

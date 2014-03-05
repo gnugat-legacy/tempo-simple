@@ -64,9 +64,9 @@ class GenerateDailyReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $date = $input->getOption('date');
+        $day = $input->getOption('date');
 
-        $timeCards = $this->timeCardRepository->findForDate($date);
+        $timeCards = $this->timeCardRepository->findForDay($day);
         $tasks = array();
         foreach ($timeCards as $timeCard) {
             $task = $timeCard->getTaskTitle();
@@ -82,7 +82,7 @@ class GenerateDailyReportCommand extends Command
         $view = 'TempoSimpleSpaghettiBundle:Report:daily.md.twig';
         $parameters = array(
             'tasks' => $tasks,
-            'date' => $date,
+            'date' => $day,
         );
 
         $output->writeln($this->templating->render($view, $parameters));

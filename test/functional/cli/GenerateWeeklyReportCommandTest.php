@@ -29,7 +29,7 @@ class GenerateWeeklyReportCommandTest extends CommandTestCase
 
         $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
         $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
-        $timeCardRepository->findForLastWeek()->willReturn(array());
+        $timeCardRepository->findForDays($lastWorkingWeek)->willReturn(array());
 
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
