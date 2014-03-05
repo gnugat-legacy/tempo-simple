@@ -16,9 +16,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 
 class GenerateWeeklyReportCommand extends Command
 {
+    /** @var DateFactory */
+    private $dateFactory;
+
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
@@ -26,14 +30,17 @@ class GenerateWeeklyReportCommand extends Command
     private $templating;
 
     /**
+     * @param DateFactory        $dateFactory
      * @param TimeCardRepository $timeCardRepository
      * @param EngineInterface    $templating
      */
     public function __construct(
+        DateFactory $dateFactory,
         TimeCardRepository $timeCardRepository,
         EngineInterface $templating
     )
     {
+        $this->dateFactory = $dateFactory;
         $this->timeCardRepository = $timeCardRepository;
         $this->templating = $templating;
 

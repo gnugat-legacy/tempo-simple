@@ -18,9 +18,13 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCard;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 
 class PunchTimeCardCommand extends Command
 {
+    /** @var DateFactory */
+    private $dateFactory;
+
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
@@ -28,14 +32,17 @@ class PunchTimeCardCommand extends Command
     private $defaultProject;
 
     /**
+     * @param DateFactory        $dateFactory
      * @param TimeCardRepository $timeCardRepository
      * @param string             $defaultProject
      */
     public function __construct(
+        DateFactory $dateFactory,
         TimeCardRepository $timeCardRepository,
         $defaultProject
     )
     {
+        $this->dateFactory = $dateFactory;
         $this->timeCardRepository = $timeCardRepository;
         $this->defaultProject = $defaultProject;
 
@@ -45,6 +52,7 @@ class PunchTimeCardCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
+        $today = $this->dateFactory->today();
         try {
             $startHour = $this->timeCardRepository->findLastOne();
         } catch (\Exception $e) {
@@ -64,7 +72,7 @@ class PunchTimeCardCommand extends Command
             'What did you do?', ''
         );
         $this->addOption('date', '-d', InputOption::VALUE_REQUIRED,
-            'Format: Y-m-d (e.g. 2014-01-23)', date('Y-m-d')
+            'Format: Y-m-d (e.g. 2014-01-23)', $today->getDay()
         );
         $this->addOption('start-hour', '-S', InputOption::VALUE_REQUIRED,
             'Format: H:i (e.g. 18:00)', $startHour
