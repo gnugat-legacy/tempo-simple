@@ -31,16 +31,16 @@ class GenerateDailyReportCommandTest extends CommandTestCase
         $dateFactory = $this->prophet->prophesize($dateFactoryClass);
         $dateFactory->today()->willReturn($date->reveal());
 
-        $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
-        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
-        $timeCardRepository->findForDay(self::DAY)->willReturn(array());
+        $dailyTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\DailyTimesheet';
+        $dailyTimesheet = $this->prophet->prophesize($dailyTimesheetClass);
+        $dailyTimesheet->find(self::DAY)->willReturn(array());
 
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
 
         $command = new GenerateDailyReportCommand(
             $dateFactory->reveal(),
-            $timeCardRepository->reveal(),
+            $dailyTimesheet->reveal(),
             $templating->reveal()
         );
 

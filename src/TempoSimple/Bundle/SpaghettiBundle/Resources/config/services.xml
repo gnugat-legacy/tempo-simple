@@ -8,7 +8,7 @@
             class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateBillableReportCommand"
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
-            <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
+            <argument type="service" id="tempo_simple_time_tracking.billable_timesheet" />
             <argument type="service" id="templating" />
             <argument>%default_project%</argument>
 
@@ -19,7 +19,7 @@
             class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateDailyReportCommand"
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
-            <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
+            <argument type="service" id="tempo_simple_time_tracking.daily_timesheet" />
             <argument type="service" id="templating" />
 
             <tag name="console.command" />
@@ -29,7 +29,7 @@
             class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateWeeklyReportCommand"
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
-            <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
+            <argument type="service" id="tempo_simple_time_tracking.weekly_timesheet" />
             <argument type="service" id="templating" />
 
             <tag name="console.command" />

@@ -23,8 +23,9 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 
             new TempoSimple\DataSource\DoctrineBundle\TempoSimpleDoctrineBundle(),
-            new TempoSimple\Bundle\SpaghettiBundle\TempoSimpleSpaghettiBundle(),
             new TempoSimple\Service\TimeBundle\TempoSimpleTimeBundle(),
+            new TempoSimple\Service\TimeTrackingBundle\TempoSimpleTimeTrackingBundle(),
+            new TempoSimple\Bundle\SpaghettiBundle\TempoSimpleSpaghettiBundle(),
         );
 
         return $bundles;

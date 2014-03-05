@@ -33,16 +33,20 @@ class GenerateBillableReportCommandTest extends CommandTestCase
         $dateFactory = $this->prophet->prophesize($dateFactoryClass);
         $dateFactory->today()->willReturn($date->reveal());
 
-        $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
-        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
-        $timeCardRepository->findForMonthAndProject(self::MONTH, $defaultProject)->willReturn(array());
+        $projectClass = 'TempoSimple\DomainModel\TimeTracking\Project';
+        $project = $this->prophet->prophesize($projectClass);
+        $project->getTasks()->willReturn(array());
+
+        $billableTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet';
+        $billableTimesheet = $this->prophet->prophesize($billableTimesheetClass);
+        $billableTimesheet->find($defaultProject, self::MONTH)->willReturn($project->reveal());
 
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
 
         $command = new GenerateBillableReportCommand(
             $dateFactory->reveal(),
-            $timeCardRepository->reveal(),
+            $billableTimesheet->reveal(),
             $templating->reveal(),
             $defaultProject
         );
