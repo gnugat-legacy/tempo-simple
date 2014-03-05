@@ -27,16 +27,16 @@ class GenerateWeeklyReportCommandTest extends CommandTestCase
         $dateFactory = $this->prophet->prophesize($dateFactoryClass);
         $dateFactory->lastWorkingWeek()->willReturn($lastWorkingWeek);
 
-        $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
-        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
-        $timeCardRepository->findForDays($lastWorkingWeek)->willReturn(array());
+        $weeklyTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\WeeklyTimesheet';
+        $weeklyTimesheet = $this->prophet->prophesize($weeklyTimesheetClass);
+        $weeklyTimesheet->find()->willReturn(array());
 
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
 
         $command = new GenerateWeeklyReportCommand(
             $dateFactory->reveal(),
-            $timeCardRepository->reveal(),
+            $weeklyTimesheet->reveal(),
             $templating->reveal()
         );
 

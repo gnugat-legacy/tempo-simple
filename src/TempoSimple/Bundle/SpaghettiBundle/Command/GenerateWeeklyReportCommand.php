@@ -17,31 +17,32 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
+use TempoSimple\Service\TimeTrackingBundle\Timesheet\WeeklyTimesheet;
 
 class GenerateWeeklyReportCommand extends Command
 {
     /** @var DateFactory */
     private $dateFactory;
 
-    /** @var TimeCardRepository */
-    private $timeCardRepository;
+    /** @var WeeklyTimesheet */
+    private $weeklyTimesheet;
 
     /** @var EngineInterface */
     private $templating;
 
     /**
-     * @param DateFactory        $dateFactory
-     * @param TimeCardRepository $timeCardRepository
-     * @param EngineInterface    $templating
+     * @param DateFactory     $dateFactory
+     * @param WeeklyTimesheet $weeklyTimesheet
+     * @param EngineInterface   $templating
      */
     public function __construct(
         DateFactory $dateFactory,
-        TimeCardRepository $timeCardRepository,
+        WeeklyTimesheet $weeklyTimesheet,
         EngineInterface $templating
     )
     {
         $this->dateFactory = $dateFactory;
-        $this->timeCardRepository = $timeCardRepository;
+        $this->weeklyTimesheet = $weeklyTimesheet;
         $this->templating = $templating;
 
         parent::__construct();
@@ -57,29 +58,8 @@ class GenerateWeeklyReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $dates = $this->dateFactory->lastWorkingWeek();
-        $lastWorkingWeek = array();
-        foreach ($dates as $date) {
-            $lastWorkingWeek[] = $date->getDay();
-        }
-        $timeCards = $this->timeCardRepository->findForDays($lastWorkingWeek);
-        $projects = array();
-        foreach ($timeCards as $timeCard) {
-            $project = $timeCard->getProjectName();
-            if (!isset($projects[$project])) {
-                $projects[$project] = array();
-            }
+        $projects = $this->weeklyTimesheet->find();
 
-            $task = $timeCard->getTaskTitle();
-            if (!isset($projects[$project][$task])) {
-                $projects[$project][$task] = array();
-            }
-
-            $description = $timeCard->getDescription();
-            if (!in_array($description, $projects[$project][$task])) {
-                $projects[$project][$task][] = $description;
-            }
-        }
         $view = 'TempoSimpleSpaghettiBundle:Report:weekly.md.twig';
         $parameters = array('projects' => $projects);
 

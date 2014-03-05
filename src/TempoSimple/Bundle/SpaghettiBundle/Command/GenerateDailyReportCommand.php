@@ -18,31 +18,32 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
+use TempoSimple\Service\TimeTrackingBundle\Timesheet\DailyTimesheet;
 
 class GenerateDailyReportCommand extends Command
 {
     /** @var DateFactory */
     private $dateFactory;
 
-    /** @var TimeCardRepository */
-    private $timeCardRepository;
+    /** @var DailyTimesheet   */
+    private $dailyTimesheet;
 
     /** @var EngineInterface */
     private $templating;
 
     /**
-     * @param DateFactory        $dateFactory
-     * @param TimeCardRepository $timeCardRepository
-     * @param EngineInterface    $templating
+     * @param DateFactory     $dateFactory
+     * @param DailyTimesheet  $dailyTimesheet
+     * @param EngineInterface $templating
      */
     public function __construct(
         DateFactory $dateFactory,
-        TimeCardRepository $timeCardRepository,
+        DailyTimesheet $dailyTimesheet,
         EngineInterface $templating
     )
     {
         $this->dateFactory = $dateFactory;
-        $this->timeCardRepository = $timeCardRepository;
+        $this->dailyTimesheet = $dailyTimesheet;
         $this->templating = $templating;
 
         parent::__construct();
@@ -66,19 +67,8 @@ class GenerateDailyReportCommand extends Command
     {
         $day = $input->getOption('date');
 
-        $timeCards = $this->timeCardRepository->findForDay($day);
-        $tasks = array();
-        foreach ($timeCards as $timeCard) {
-            $task = $timeCard->getTaskTitle();
-            if (!isset($tasks[$task])) {
-                $tasks[$task] = array();
-            }
+        $tasks = $this->dailyTimesheet->find($day);
 
-            $description = $timeCard->getDescription();
-            if (!in_array($description, $tasks[$task])) {
-                $tasks[$task][] = $description;
-            }
-        }
         $view = 'TempoSimpleSpaghettiBundle:Report:daily.md.twig';
         $parameters = array(
             'tasks' => $tasks,
