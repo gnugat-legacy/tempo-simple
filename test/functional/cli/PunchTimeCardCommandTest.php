@@ -24,7 +24,6 @@ class PunchTimeCardCommandTest extends CommandTestCase
     {
         $parameters = array(
             'task' => 'task',
-            'end-hour' => '10:00',
         );
 
         $defaultProject = 'Project 1';
@@ -43,7 +42,7 @@ class PunchTimeCardCommandTest extends CommandTestCase
 
         $timeOfDayFactoryClass = 'TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory';
         $timeOfDayFactory = $this->prophet->prophesize($timeOfDayFactoryClass);
-        $timeOfDayFactory->now()->willReturn($date->reveal());
+        $timeOfDayFactory->now()->willReturn($timeOfDay->reveal());
 
         $timeCardRepositoryClass = 'TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository';
         $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);

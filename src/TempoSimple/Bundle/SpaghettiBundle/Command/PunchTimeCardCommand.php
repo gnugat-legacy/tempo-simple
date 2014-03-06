@@ -59,9 +59,9 @@ class PunchTimeCardCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
-        $today = $this->dateFactory->today();
+        $today = $this->dateFactory->today()->getDay();
         try {
-            $startHour = $this->timeCardRepository->findLastOneForDay($today->getDay());
+            $startHour = $this->timeCardRepository->findLastOneForDay($today);
         } catch (\Exception $e) {
             $startHour = '09:00';
         }
@@ -70,7 +70,6 @@ class PunchTimeCardCommand extends Command
         $this->setAliases(array('punch'));
 
         $this->addArgument('task', InputArgument::REQUIRED);
-        $this->addArgument('end-hour', InputArgument::OPTIONAL, 'Format: H:i (e.g. 18:15)');
 
         $this->addOption('project', '-p', InputOption::VALUE_REQUIRED,
             'What project are you working for?', $this->defaultProject
@@ -79,10 +78,13 @@ class PunchTimeCardCommand extends Command
             'What did you do?', ''
         );
         $this->addOption('date', '-d', InputOption::VALUE_REQUIRED,
-            'Format: Y-m-d (e.g. 2014-01-23)', $this->timeOfDayFactory->now()
+            'Format: Y-m-d (e.g. 2014-01-23)', $today
         );
         $this->addOption('start-hour', '-S', InputOption::VALUE_REQUIRED,
             'Format: H:i (e.g. 18:00)', $startHour
+        );
+        $this->addOption('end-hour', '-E', InputOption::VALUE_REQUIRED,
+            'Format: H:i (e.g. 18:15)', $this->timeOfDayFactory->now()->getHour()
         );
     }
 
@@ -94,7 +96,7 @@ class PunchTimeCardCommand extends Command
             $input->getArgument('task'),
             $input->getOption('date'),
             $input->getOption('start-hour'),
-            $input->getArgument('end-hour') ?: self::timeRoundByQuarter(),
+            $input->getOption('end-hour'),
             $input->getOption('description')
         );
 
