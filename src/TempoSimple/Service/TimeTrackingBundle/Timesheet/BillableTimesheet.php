@@ -15,18 +15,24 @@ use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\DomainModel\TimeTracking\Project;
 use TempoSimple\DomainModel\TimeTracking\Task;
 use TempoSimple\DomainModel\TimeTracking\TimeCard;
+use TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory;
 
 class BillableTimesheet
 {
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
+    /** @var TimeOfDayFactory */
+    private $timeOfDayFactory;
+
     /**
      * @param TimeCardRepository $timeCardRepository
+     * @param TimeOfDayFactory   $timeOfDayFactory
      */
-    public function __construct(TimeCardRepository $timeCardRepository)
+    public function __construct(TimeCardRepository $timeCardRepository, TimeOfDayFactory $timeOfDayFactory)
     {
         $this->timeCardRepository = $timeCardRepository;
+        $this->timeOfDayFactory = $timeOfDayFactory;
     }
 
     /**
@@ -45,7 +51,10 @@ class BillableTimesheet
             $startHour = $timeCard->getStartHour();
             $endHour = $timeCard->getEndHour();
 
-            $timeCard = new TimeCard($startHour, $endHour);
+            $start = $this->timeOfDayFactory->fromString($startHour);
+            $end = $this->timeOfDayFactory->fromString($endHour);
+
+            $timeCard = new TimeCard($start, $end);
 
             if (!$project->hasTask($taskTitle)) {
                 $task = new Task($taskTitle);

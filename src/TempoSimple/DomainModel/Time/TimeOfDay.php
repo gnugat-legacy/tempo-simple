@@ -13,6 +13,8 @@ namespace TempoSimple\DomainModel\Time;
 
 class TimeOfDay
 {
+    const NB_SECOND_PER_MINUTE = 60.0;
+
     const SEPARATOR = ':';
 
     /** @var integer */
@@ -27,18 +29,34 @@ class TimeOfDay
      */
     public function __construct($hour, $minutes)
     {
-        $this->hour = $hour;
-        $this->minutes = $minutes;
+        $this->hour = intval($hour);
+        $this->minutes = intval($minutes);
     }
 
     /** @return string */
     public function getHour()
     {
-        $times = array(
-            $this->hour,
-            $this->minutes,
+        $literalHour = ($this->hour > 10) ? $this->hour : '0'.$this->hour;
+        $literalMinutes = ($this->minutes > 10) ? $this->minutes : '0'.$this->minutes;
+
+        $time = array(
+            $literalHour,
+            $literalMinutes,
         );
 
-        return implode(self::SEPARATOR, $times);
+        return implode(self::SEPARATOR, $time);
+    }
+
+    /**
+     * @param TimeOfDay $begin
+     *
+     * @return float
+     */
+    public function getTimeSpentSince(TimeOfDay $begin)
+    {
+        $hourDiff = floatval($this->hour) - floatval($begin->hour);
+        $minutesDiff = floatval($this->minutes) - floatval($begin->minutes);
+
+        return $hourDiff + $minutesDiff / self::NB_SECOND_PER_MINUTE;
     }
 }
