@@ -16,26 +16,34 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
+use TempoSimple\Service\TimeTrackingBundle\Timesheet\DailyTimesheet;
 
 class GenerateDailyReportCommand extends Command
 {
-    /** @var TimeCardRepository */
-    private $timeCardRepository;
+    /** @var DateFactory */
+    private $dateFactory;
+
+    /** @var DailyTimesheet   */
+    private $dailyTimesheet;
 
     /** @var EngineInterface */
     private $templating;
 
     /**
-     * @param TimeCardRepository $timeCardRepository
-     * @param EngineInterface    $templating
+     * @param DateFactory     $dateFactory
+     * @param DailyTimesheet  $dailyTimesheet
+     * @param EngineInterface $templating
      */
     public function __construct(
-        TimeCardRepository $timeCardRepository,
+        DateFactory $dateFactory,
+        DailyTimesheet $dailyTimesheet,
         EngineInterface $templating
     )
     {
-        $this->timeCardRepository = $timeCardRepository;
+        $this->dateFactory = $dateFactory;
+        $this->dailyTimesheet = $dailyTimesheet;
         $this->templating = $templating;
 
         parent::__construct();
@@ -44,36 +52,27 @@ class GenerateDailyReportCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
+        $today = $this->dateFactory->today();
+
         $this->setName('tempo-simple:generate:daily-report');
         $this->setAliases(array('daily'));
 
         $this->addOption('date', '-d', InputOption::VALUE_REQUIRED,
-            'Format: Y-m-d (e.g. 2014-01-23)', date('Y-m-d')
+            'Format: Y-m-d (e.g. 2014-01-23)', $today->getDay()
         );
     }
 
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $date = $input->getOption('date');
+        $day = $input->getOption('date');
 
-        $timeCards = $this->timeCardRepository->findForDate($date);
-        $tasks = array();
-        foreach ($timeCards as $timeCard) {
-            $task = $timeCard->getTaskTitle();
-            if (!isset($tasks[$task])) {
-                $tasks[$task] = array();
-            }
+        $tasks = $this->dailyTimesheet->find($day);
 
-            $description = $timeCard->getDescription();
-            if (!in_array($description, $tasks[$task])) {
-                $tasks[$task][] = $description;
-            }
-        }
         $view = 'TempoSimpleSpaghettiBundle:Report:daily.md.twig';
         $parameters = array(
             'tasks' => $tasks,
-            'date' => $date,
+            'date' => $day,
         );
 
         $output->writeln($this->templating->render($view, $parameters));

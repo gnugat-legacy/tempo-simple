@@ -9,10 +9,18 @@
  * file that was distributed with this source code.
  */
 
-namespace TempoSimple\Bundle\SpaghettiBundle\Entity;
+namespace TempoSimple\DataSource\DoctrineBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
+/**
+ * A wrapper for SQL queries against the TimeCard table.
+ *
+ * Note:
+ *
+ * + day format: 'Y-m-d' (e.g. '1989-01-25')
+ * + month format: 'Y-m' (e.g. '1989-01')
+ */
 class TimeCardRepository extends EntityRepository
 {
     /**
@@ -29,43 +37,29 @@ class TimeCardRepository extends EntityRepository
     }
 
     /**
-     * @param string $date Format: 'Y-m-d' (e.g. '2014-01-23')
+     * @param string $day
      *
      * @return array of TimeCard
      */
-    public function findForDate($date)
+    public function findForDay($day)
     {
-        $query = $this->createQueryBuilder('t')
-            ->where('t.date = :date')
-
-            ->orderBy('t.projectName', 'ASC')
-            ->orderBy('t.taskTitle', 'ASC')
-
-            ->setParameter('date', $date)
-
-            ->getQuery()
-        ;
-
-        return $query->getResult();
+        return $this->findForDays(array($day));
     }
 
-    /** @return array of TimeCard */
-    public function findForLastWeek()
+    /**
+     * @param array $days
+     *
+     * @return array of TimeCard
+     */
+    public function findForDays(array $days)
     {
-        $lastWeek = array();
-        $lastWeek[] = date('Y-m-d', strtotime('monday last week'));
-        $lastWeek[] = date('Y-m-d', strtotime('tuesday last week'));
-        $lastWeek[] = date('Y-m-d', strtotime('wednesday last week'));
-        $lastWeek[] = date('Y-m-d', strtotime('thursday last week'));
-        $lastWeek[] = date('Y-m-d', strtotime('friday last week'));
-
         $query = $this->createQueryBuilder('t')
-            ->where('t.date IN (:lastWeek)')
+            ->where('t.date IN (:days)')
 
             ->orderBy('t.projectName', 'ASC')
             ->orderBy('t.taskTitle', 'ASC')
 
-            ->setParameter('lastWeek', $lastWeek)
+            ->setParameter('days', $days)
 
             ->getQuery()
         ;
@@ -74,12 +68,12 @@ class TimeCardRepository extends EntityRepository
     }
 
     /**
-     * @param string $month   Format: 'Y-m' (e.g. '2014-01')
+     * @param string $month
      * @param string $project
      *
      * @return array of TimeCard
      */
-    public function findBillable($month, $project)
+    public function findForMonthAndProject($month, $project)
     {
         $monthExpr = $month.'-%';
 
@@ -99,16 +93,19 @@ class TimeCardRepository extends EntityRepository
         return $query->getResult();
     }
 
-    /** @return TimeCard */
-    public function findLastOne()
+    /**
+     * @param string $day
+     *
+     * @return TimeCard
+     */
+    public function findLastOneForDay($day)
     {
-        $today = date('Y-m-d');
         $query = $this->createQueryBuilder('t')
-            ->where('t.date = :today')
+            ->where('t.date = :day')
 
             ->orderBy('t.endHour', 'DESC')
 
-            ->setParameter('today', $today)
+            ->setParameter('day', $day)
 
             ->setMaxResults(1)
 
@@ -123,6 +120,7 @@ class TimeCardRepository extends EntityRepository
         if ('12:00' === $endHour) {
             return '13:00';
         }
+
         return $endHour;
     }
 }

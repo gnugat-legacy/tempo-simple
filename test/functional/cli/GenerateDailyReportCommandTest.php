@@ -17,19 +17,30 @@ use TempoSimple\Bundle\SpaghettiBundle\Command\GenerateDailyReportCommand;
 
 class GenerateDailyReportCommandTest extends CommandTestCase
 {
+    const DAY = '1989-01-25';
+
     public function testExecute()
     {
         $parameters = array();
 
-        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
-        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
-        $timeCardRepository->findForDate(date('Y-m-d'))->willReturn(array());
+        $dateClass = 'TempoSimple\DomainModel\Time\Date';
+        $date = $this->prophet->prophesize($dateClass);
+        $date->getDay()->willReturn(self::DAY);
+
+        $dateFactoryClass = 'TempoSimple\Service\TimeBundle\Factory\DateFactory';
+        $dateFactory = $this->prophet->prophesize($dateFactoryClass);
+        $dateFactory->today()->willReturn($date->reveal());
+
+        $dailyTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\DailyTimesheet';
+        $dailyTimesheet = $this->prophet->prophesize($dailyTimesheetClass);
+        $dailyTimesheet->find(self::DAY)->willReturn(array());
 
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
 
         $command = new GenerateDailyReportCommand(
-            $timeCardRepository->reveal(),
+            $dateFactory->reveal(),
+            $dailyTimesheet->reveal(),
             $templating->reveal()
         );
 

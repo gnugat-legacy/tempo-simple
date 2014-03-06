@@ -16,15 +16,19 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
-use TempoSimple\Domain\TimeTracking\Project;
-use TempoSimple\Domain\TimeTracking\Task;
-use TempoSimple\Domain\TimeTracking\TimeCard;
+use TempoSimple\DomainModel\TimeTracking\Project;
+use TempoSimple\DomainModel\TimeTracking\Task;
+use TempoSimple\DomainModel\TimeTracking\TimeCard;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
+use TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet;
 
 class GenerateBillableReportCommand extends Command
 {
-    /** @var TimeCardRepository */
-    private $timeCardRepository;
+    /** @var DateFactory */
+    private $dateFactory;
+
+    /** @var BillableTimesheet */
+    private $billableTimesheet;
 
     /** @var EngineInterface */
     private $templating;
@@ -33,17 +37,20 @@ class GenerateBillableReportCommand extends Command
     private $defaultProject;
 
     /**
-     * @param TimeCardRepository $timeCardRepository
+     * @param DateFactory        $dateFactory
+     * @param BillableTimesheet  $billableTimesheet
      * @param EngineInterface    $templating
      * @param string             $defaultProject
      */
     public function __construct(
-        TimeCardRepository $timeCardRepository,
+        DateFactory $dateFactory,
+        BillableTimesheet $billableTimesheet,
         EngineInterface $templating,
         $defaultProject
     )
     {
-        $this->timeCardRepository = $timeCardRepository;
+        $this->dateFactory = $dateFactory;
+        $this->billableTimesheet = $billableTimesheet;
         $this->templating = $templating;
         $this->defaultProject = $defaultProject;
 
@@ -53,6 +60,8 @@ class GenerateBillableReportCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
+        $today = $this->dateFactory->today();
+
         $this->setName('tempo-simple:generate:billable-report');
         $this->setAliases(array('billable'));
 
@@ -60,7 +69,7 @@ class GenerateBillableReportCommand extends Command
             $this->defaultProject
         );
         $this->addOption('month', '-m', InputOption::VALUE_REQUIRED,
-            'Format: Y-m (e.g. 2014-01)', date('Y-m')
+            'Format: Y-m (e.g. 2014-01)', $today->getMonth()
         );
     }
 
@@ -70,23 +79,7 @@ class GenerateBillableReportCommand extends Command
         $month = $input->getOption('month');
         $projectName = $input->getOption('project');
 
-        $project = new Project($projectName);
-
-        $timeCards = $this->timeCardRepository->findBillable($month, $projectName);
-        foreach ($timeCards as $timeCard) {
-            $taskTitle = $timeCard->getTaskTitle();
-            $startHour = $timeCard->getStartHour();
-            $endHour = $timeCard->getEndHour();
-
-            $timeCard = new TimeCard($startHour, $endHour);
-
-            if (!$project->hasTask($taskTitle)) {
-                $task = new Task($taskTitle);
-                $project->addTask($task);
-            }
-            $task = $project->getTask($taskTitle);
-            $task->addTimeCard($timeCard);
-        }
+        $project = $this->billableTimesheet->find($projectName, $month);
 
         $view = 'TempoSimpleSpaghettiBundle:Report:billable.md.twig';
         $parameters = array('tasks' => $project->getTasks());

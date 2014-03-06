@@ -3,8 +3,59 @@
 <container xmlns="http://symfony.com/schema/dic/services"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-    <imports>
-        <import resource="services/01-doctrine.xml" />
-        <import resource="services/02-command.xml" />
-    </imports>
+    <services>
+        <service id="tempo_simple_spaghetti.generate_billable_report_command"
+            class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateBillableReportCommand"
+        >
+            <argument type="service" id="tempo_simple_time.date_factory" />
+            <argument type="service" id="tempo_simple_time_tracking.billable_timesheet" />
+            <argument type="service" id="templating" />
+            <argument>%default_project%</argument>
+
+            <tag name="console.command" />
+        </service>
+
+        <service id="tempo_simple_spaghetti.generate_daily_report_command"
+            class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateDailyReportCommand"
+        >
+            <argument type="service" id="tempo_simple_time.date_factory" />
+            <argument type="service" id="tempo_simple_time_tracking.daily_timesheet" />
+            <argument type="service" id="templating" />
+
+            <tag name="console.command" />
+        </service>
+
+        <service id="tempo_simple_spaghetti.generate_weekly_report_command"
+            class="TempoSimple\Bundle\SpaghettiBundle\Command\GenerateWeeklyReportCommand"
+        >
+            <argument type="service" id="tempo_simple_time.date_factory" />
+            <argument type="service" id="tempo_simple_time_tracking.weekly_timesheet" />
+            <argument type="service" id="templating" />
+
+            <tag name="console.command" />
+        </service>
+
+        <service id="tempo_simple_spaghetti.print_cheat_sheet_command"
+            class="TempoSimple\Bundle\SpaghettiBundle\Command\PrintCheatSheetCommand"
+        >
+            <argument type="service" id="tempo_simple_time.date_factory" />
+            <argument type="service" id="tempo_simple_time.time_of_day_factory" />
+            <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
+            <argument type="service" id="templating" />
+            <argument>%default_project%</argument>
+
+            <tag name="console.command" />
+        </service>
+
+        <service id="tempo_simple_spaghetti.punch_time_card_command"
+            class="TempoSimple\Bundle\SpaghettiBundle\Command\PunchTimeCardCommand"
+        >
+            <argument type="service" id="tempo_simple_time.date_factory" />
+            <argument type="service" id="tempo_simple_time.time_of_day_factory" />
+            <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
+            <argument>%default_project%</argument>
+
+            <tag name="console.command" />
+        </service>
+    </services>
 </container>

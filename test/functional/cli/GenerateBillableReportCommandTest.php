@@ -17,21 +17,36 @@ use TempoSimple\Bundle\SpaghettiBundle\Command\GenerateBillableReportCommand;
 
 class GenerateBillableReportCommandTest extends CommandTestCase
 {
+    const MONTH = '1989-01';
+
     public function testExecute()
     {
         $parameters = array();
 
         $defaultProject = 'Project 1';
 
-        $timeCardRepositoryClass = 'TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository';
-        $timeCardRepository = $this->prophet->prophesize($timeCardRepositoryClass);
-        $timeCardRepository->findBillable(date('Y-m'), $defaultProject)->willReturn(array());
+        $dateClass = 'TempoSimple\DomainModel\Time\Date';
+        $date = $this->prophet->prophesize($dateClass);
+        $date->getMonth()->willReturn(self::MONTH);
+
+        $dateFactoryClass = 'TempoSimple\Service\TimeBundle\Factory\DateFactory';
+        $dateFactory = $this->prophet->prophesize($dateFactoryClass);
+        $dateFactory->today()->willReturn($date->reveal());
+
+        $projectClass = 'TempoSimple\DomainModel\TimeTracking\Project';
+        $project = $this->prophet->prophesize($projectClass);
+        $project->getTasks()->willReturn(array());
+
+        $billableTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet';
+        $billableTimesheet = $this->prophet->prophesize($billableTimesheetClass);
+        $billableTimesheet->find($defaultProject, self::MONTH)->willReturn($project->reveal());
 
         $templatingClass = 'Symfony\Component\Templating\EngineInterface';
         $templating = $this->prophet->prophesize($templatingClass);
 
         $command = new GenerateBillableReportCommand(
-            $timeCardRepository->reveal(),
+            $dateFactory->reveal(),
+            $billableTimesheet->reveal(),
             $templating->reveal(),
             $defaultProject
         );

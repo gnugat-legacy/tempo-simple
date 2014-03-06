@@ -4,12 +4,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
-        <service id="tempo_simple_spaghetti.time_card_reporitory"
-            class="TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository"
-            factory-service="doctrine"
-            factory-method="getRepository"
+        <service id="tempo_simple_time.date_factory"
+            class="TempoSimple\Service\TimeBundle\Factory\DateFactory"
         >
-            <argument>TempoSimpleSpaghettiBundle:TimeCard</argument>
+        </service>
+
+        <service id="tempo_simple_time.time_of_day_factory"
+            class="TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory"
+        >
         </service>
     </services>
 </container>

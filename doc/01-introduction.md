@@ -30,3 +30,4 @@ of TempoSimple's power.
 * [tests](04-tests.md)
 * [technical debt](05-technical-debt.md)
 * [glossary](06-glossary.md)
+* [architecture](07-architecture.md)

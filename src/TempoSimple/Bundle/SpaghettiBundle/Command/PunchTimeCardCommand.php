@@ -16,12 +16,19 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCardRepository;
-use TempoSimple\Bundle\SpaghettiBundle\Entity\TimeCard;
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCard;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
+use TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory;
 
 class PunchTimeCardCommand extends Command
 {
+    /** @var DateFactory */
+    private $dateFactory;
+
+    /** @var TimeOfDayFactory */
+    private $timeOfDayFactory;
+
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
@@ -29,14 +36,20 @@ class PunchTimeCardCommand extends Command
     private $defaultProject;
 
     /**
+     * @param DateFactory        $dateFactory
+     * @param TimeOfDayFactory   $timeOfDayFactory
      * @param TimeCardRepository $timeCardRepository
      * @param string             $defaultProject
      */
     public function __construct(
+        DateFactory $dateFactory,
+        TimeOfDayFactory $timeOfDayFactory,
         TimeCardRepository $timeCardRepository,
         $defaultProject
     )
     {
+        $this->dateFactory = $dateFactory;
+        $this->timeOfDayFactory = $timeOfDayFactory;
         $this->timeCardRepository = $timeCardRepository;
         $this->defaultProject = $defaultProject;
 
@@ -46,8 +59,9 @@ class PunchTimeCardCommand extends Command
     /** {@inheritdoc} */
     protected function configure()
     {
+        $today = $this->dateFactory->today();
         try {
-            $startHour = $this->timeCardRepository->findLastOne();
+            $startHour = $this->timeCardRepository->findLastOneForDay($today->getDay());
         } catch (\Exception $e) {
             $startHour = '09:00';
         }
@@ -65,7 +79,7 @@ class PunchTimeCardCommand extends Command
             'What did you do?', ''
         );
         $this->addOption('date', '-d', InputOption::VALUE_REQUIRED,
-            'Format: Y-m-d (e.g. 2014-01-23)', date('Y-m-d')
+            'Format: Y-m-d (e.g. 2014-01-23)', $this->timeOfDayFactory->now()
         );
         $this->addOption('start-hour', '-S', InputOption::VALUE_REQUIRED,
             'Format: H:i (e.g. 18:00)', $startHour
@@ -85,16 +99,5 @@ class PunchTimeCardCommand extends Command
         );
 
         $this->timeCardRepository->insert($timeCard);
-    }
-
-    public static function timeRoundByQuarter()
-    {
-        $date = getdate();
-        
-        $roundedMinutes = $date['minutes'] % 15;
-        
-        $minutes = ($roundedMinutes > 7) ? $date['minutes'] + (15 - $roundedMinutes) : $date['minutes'] - $roundedMinutes;
-        
-        return $date['hours'].":".$minutes;
     }
 }

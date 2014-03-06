@@ -21,8 +21,9 @@
 
 ## Options, default values and time formats
 
-    -d --day         {{ 'now'|date('Y-m-d') }} Format: `Y-m-d` (e.g. `1989-01-25`)
+    -d --day         {{ today.getDay }} Format: `Y-m-d` (e.g. `1989-01-25`)
     -D --description
-    -m --month       {{ 'now'|date('Y-m') }}    Format: `Y-m` (e.g. `2004-09`)
+    -m --month       {{ today.getMonth }}    Format: `Y-m` (e.g. `2004-09`)
     -p --project     {{ defaultProject }}
     -S --start-hour  {{ startHour }}      Format: `H:i` (e.g. `09:00`, `13:45`)
+    -S --end-hour    {{ endHour }}      Format: `H:i` (e.g. `10:15`, `18:30`)

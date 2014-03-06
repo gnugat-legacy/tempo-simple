@@ -22,6 +22,9 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 
+            new TempoSimple\DataSource\DoctrineBundle\TempoSimpleDoctrineBundle(),
+            new TempoSimple\Service\TimeBundle\TempoSimpleTimeBundle(),
+            new TempoSimple\Service\TimeTrackingBundle\TempoSimpleTimeTrackingBundle(),
             new TempoSimple\Bundle\SpaghettiBundle\TempoSimpleSpaghettiBundle(),
         );
 
