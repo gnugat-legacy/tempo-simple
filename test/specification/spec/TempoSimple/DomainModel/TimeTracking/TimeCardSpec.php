@@ -3,20 +3,18 @@
 namespace spec\TempoSimple\DomainModel\TimeTracking;
 
 use PhpSpec\ObjectBehavior;
+use TempoSimple\DomainModel\Time\TimeOfDay;
 
 class TimeCardSpec extends ObjectBehavior
 {
-    function it_computes_working_hours_in_the_same_hour()
+    const WORKING_HOURS_SPENT = 0.7;
+
+    function it_computes_working_hours_spent(TimeOfDay $start, TimeOfDay $end)
     {
-        $this->beConstructedWith('09:15', '09:45');
+        $end->getTimeSpentSince($start)->willReturn(self::WORKING_HOURS_SPENT);
 
-        $this->getWorkingHours()->shouldBe(0.5);
-    }
+        $this->beConstructedWith($start, $end);
 
-    function it_computes_short_working_hours_astride_many_hours()
-    {
-        $this->beConstructedWith('13:15', '16:30');
-
-        $this->getWorkingHours()->shouldBe(3.25);
+        $this->getWorkingHours()->shouldBe(self::WORKING_HOURS_SPENT);
     }
 }

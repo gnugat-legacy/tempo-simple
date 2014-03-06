@@ -28,7 +28,7 @@ class DateFactory
     /** @return Date */
     public function today()
     {
-        if (!$this->today instanceof Date) {
+        if (!($this->today instanceof Date)) {
             $today = new DateTime();
             $this->today = new Date(
                 $today->format('Y'),

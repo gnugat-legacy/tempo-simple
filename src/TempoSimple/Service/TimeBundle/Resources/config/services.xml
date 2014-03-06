@@ -8,5 +8,10 @@
             class="TempoSimple\Service\TimeBundle\Factory\DateFactory"
         >
         </service>
+
+        <service id="tempo_simple_time.time_of_day_factory"
+            class="TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory"
+        >
+        </service>
     </services>
 </container>
