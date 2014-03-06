@@ -38,7 +38,7 @@ Learn more about the steps followed by the script by reading its
 
 You finished a session? Punch a new time card:
 
-    ts punch '#4423 - Task with helpful title' '11:00'
+    ts punch '#4423 - Task with helpful title'
 
 You need to generate reports? Go for it:
 

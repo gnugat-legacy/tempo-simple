@@ -34,8 +34,8 @@ Let's say you had the following day:
 
 To record the time spent, you'll run:
 
-    ts punch '#4423 - hard task' '12:00'
-    ts punch '#4423 - hard task' '18:00'
+    ts punch '#4423 - hard task' # Just before going to have a lunch
+    ts punch '#4423 - hard task' # Just before leaving the workplace
 
 That's it! TempoSimple will have guessed the followings:
 
@@ -43,22 +43,26 @@ That's it! TempoSimple will have guessed the followings:
 * the project, based on the one set in the configuration
 * the morning's start hour (9 o'clock)
 * the afternoon's start hour (if you finish at noon, the start hour is 1 o'clock)
+* the end hours (takes the current time)
 
 ### Many sessions in one task
 
 Generally you have sub-tasks in your tasks. You can micro manage your time spent
 on these by punching time cards and adding a description:
 
-    ts punch '#1337 - task with sub-tasks' '10:00' -D 'sub-task 1' -S '09:30'
-    ts punch '#1337 - task with sub-tasks' '12:00' -D 'sub-task 2'
-    ts punch '#1337 - task with sub-tasks' '13:30' -D 'sub-task 2'
-    ts punch '#1337 - task with sub-tasks' '18:00' -D 'sub-task 3'
+    ts punch '#1337 - task with sub-tasks' -D 'sub-task 1' -S '09:30' # It's 10:00
+    ts punch '#1337 - task with sub-tasks' -D 'sub-task 2' -E '12:00' # It's 16:00
+    ts punch '#1337 - task with sub-tasks' -D 'sub-task 2' # It's 16:00
+    ts punch '#1337 - task with sub-tasks' -D 'sub-task 3' # It's 18:00
 
 As you can see, we started our day at half past 9 instead of 9 o'clock, so we
 used the `-S` (or `--start-hour`) option.
 
 You can put anything in the `-D` (or `--description`) option: the sub task
 title, or precisions on what you exactly did.
+
+Also, we forgot to punch before lunch, so we used the `-E` (or `--end-hour`)
+option afterward.
 
 ## Reports
 
