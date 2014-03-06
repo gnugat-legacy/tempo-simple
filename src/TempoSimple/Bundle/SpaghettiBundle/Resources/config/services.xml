@@ -39,6 +39,7 @@
             class="TempoSimple\Bundle\SpaghettiBundle\Command\PrintCheatSheetCommand"
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
+            <argument type="service" id="tempo_simple_time.time_of_day_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
             <argument type="service" id="templating" />
             <argument>%default_project%</argument>
@@ -50,6 +51,7 @@
             class="TempoSimple\Bundle\SpaghettiBundle\Command\PunchTimeCardCommand"
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
+            <argument type="service" id="tempo_simple_time.time_of_day_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
             <argument>%default_project%</argument>
 
