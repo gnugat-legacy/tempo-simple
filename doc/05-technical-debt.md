@@ -13,29 +13,19 @@ it  and ship it again!
 
 ## Directories
 
-* the spaghetti bundle should be split up:
-  + rename `src/Bundle` into `src/ApplicationLayer` directory:
-    - create a cli bundle
-  + rename `src/Domain` into `src/DomainModel`
-  + create a `src/DataSource` directory:
-    - create a time tracking bundle
-
-## Commands
-
-* the logic is all in the commands:
-  + create some services
-  + make input converter, so web controllers can use the same process
+* move the spaghetti bundle into `src/SpaghettiBundle`
+* create a cli bundle in `src/Application/CliBundle`
+* move the specifications into `test/specification`
 
 ## Model
 
-* the model is higly coupled to Doctrine2: create some model class
-* decouple the model from Doctrine2:
-  + create domain repository
-  + create gateway interfaces
-  + create factories
-* the schema isn't flexible:
-  + create a project table
-  + create a task table
+* rename `src/DomainModel/TimeTracking` into `src/DomainModel/ProjectManagement`
+* rename `Task` into `UserStory`
+* rename `TimeCard` into `WorkSession`
+
+## Services
+
+* create `Context` as a facade to get default options
 
 ## Next readings
 
