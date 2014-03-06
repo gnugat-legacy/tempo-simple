@@ -1,5 +1,29 @@
 # Changes between versions
 
+## 0.3.2: Fixed end hour
+
+* updated the oducmentation
+* changed end hour argument into an option
+
+### Backward Compatibility Breaks
+
+The `punch`'s `end-hour` argument became a simple option (with helpful default
+values).
+
+## 0.3.1: Refactoring session 2
+
+* added architecture documentation
+* created DomainModel, Service and DataSource folders
+* moved logic from commands to TimeTracking timesheet services
+* moved date management to time factory services
+* moved persistence layer into DataSource
+* allowed any minutes to be supported in time spent computation
+
+## 0.3.0: Guess end hour
+
+* made end-hour argument optional
+* guess end-hour using current time in quarter hour
+
 ## 0.2.2: Fix install
 
 * removed `app/bootstrap.php.cache` file
