@@ -15,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\WeeklyTimesheet;
 
@@ -33,7 +32,7 @@ class GenerateWeeklyReportCommand extends Command
     /**
      * @param DateFactory     $dateFactory
      * @param WeeklyTimesheet $weeklyTimesheet
-     * @param EngineInterface   $templating
+     * @param EngineInterface $templating
      */
     public function __construct(
         DateFactory $dateFactory,
