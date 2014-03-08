@@ -94,6 +94,28 @@ class TimeCardRepository extends EntityRepository
     }
 
     /**
+     * @param string $month
+     *
+     * @return array of TimeCard
+     */
+    public function findForMonth($month)
+    {
+        $monthExpr = $month.'-%';
+
+        $query = $this->createQueryBuilder('t')
+            ->where('t.date LIKE :monthExpr')
+
+            ->orderBy('t.date', 'ASC')
+
+            ->setParameter('monthExpr', $monthExpr)
+
+            ->getQuery()
+        ;
+
+        return $query->getResult();
+    }
+
+    /**
      * @param string $day
      *
      * @return TimeCard
