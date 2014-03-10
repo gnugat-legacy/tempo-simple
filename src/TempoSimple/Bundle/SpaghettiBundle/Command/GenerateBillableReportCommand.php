@@ -17,8 +17,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\DomainModel\TimeTracking\Project;
-use TempoSimple\DomainModel\TimeTracking\Task;
-use TempoSimple\DomainModel\TimeTracking\TimeCard;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet;
 
@@ -37,10 +35,10 @@ class GenerateBillableReportCommand extends Command
     private $defaultProject;
 
     /**
-     * @param DateFactory        $dateFactory
-     * @param BillableTimesheet  $billableTimesheet
-     * @param EngineInterface    $templating
-     * @param string             $defaultProject
+     * @param DateFactory       $dateFactory
+     * @param BillableTimesheet $billableTimesheet
+     * @param EngineInterface   $templating
+     * @param string            $defaultProject
      */
     public function __construct(
         DateFactory $dateFactory,
