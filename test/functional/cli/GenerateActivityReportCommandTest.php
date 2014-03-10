@@ -23,6 +23,10 @@ class GenerateActivityReportCommandTest extends CommandTestCase
     {
         $parameters = array();
 
+        $dayCollectionClass = 'TempoSimple\DomainModel\TimeTracking\DayCollection';
+        $dayCollection = $this->prophet->prophesize($dayCollectionClass);
+        $dayCollection->toArray()->willReturn(array());
+
         $dateClass = 'TempoSimple\DomainModel\Time\Date';
         $date = $this->prophet->prophesize($dateClass);
         $date->getMonth()->willReturn(self::MONTH);
@@ -33,15 +37,12 @@ class GenerateActivityReportCommandTest extends CommandTestCase
 
         $activityTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\ActivityTimesheet';
         $activityTimesheet = $this->prophet->prophesize($activityTimesheetClass);
-        $activityTimesheet->find(self::MONTH)->willReturn(array());
-
-        $templatingClass = 'Symfony\Component\Templating\EngineInterface';
-        $templating = $this->prophet->prophesize($templatingClass);
+        $activityTimesheet->getHeaders()->willReturn(array());
+        $activityTimesheet->find(self::MONTH)->willReturn($dayCollection->reveal());
 
         $command = new GenerateActivityReportCommand(
             $dateFactory->reveal(),
-            $activityTimesheet->reveal(),
-            $templating->reveal()
+            $activityTimesheet->reveal()
         );
 
         $this->givenThisCommand($command);

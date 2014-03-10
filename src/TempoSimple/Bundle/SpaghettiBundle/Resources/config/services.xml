@@ -9,7 +9,6 @@
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_time_tracking.activity_timesheet" />
-            <argument type="service" id="templating" />
 
             <tag name="console.command" />
         </service>

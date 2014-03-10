@@ -12,8 +12,10 @@
 namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
+use TempoSimple\DomainModel\TimeTracking\DayCollection;
 use TempoSimple\DomainModel\TimeTracking\Project;
 use TempoSimple\DomainModel\TimeTracking\TimeCard;
+use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory;
 
 class ActivityTimesheet
@@ -21,48 +23,60 @@ class ActivityTimesheet
     /** @var TimeCardRepository */
     private $timeCardRepository;
 
+    /** @var DateFactory */
+    private $dateFactory;
+
     /** @var TimeOfDayFactory */
     private $timeOfDayFactory;
 
     /**
      * @param TimeCardRepository $timeCardRepository
+     * @param DateFactory        $dateFactory
      * @param TimeOfDayFactory   $timeOfDayFactory
      */
-    public function __construct(TimeCardRepository $timeCardRepository, TimeOfDayFactory $timeOfDayFactory)
+    public function __construct(
+        TimeCardRepository $timeCardRepository,
+        DateFactory $dateFactory,
+        TimeOfDayFactory $timeOfDayFactory
+    )
     {
         $this->timeCardRepository = $timeCardRepository;
+        $this->dateFactory = $dateFactory;
         $this->timeOfDayFactory = $timeOfDayFactory;
+    }
+
+    /** return array */
+    public function getHeaders()
+    {
+        return array('Projet', 'Date', 'Temps', 'Description');
     }
 
     /**
      * @param string $month Format: 'Y-m' (e.g. '1989-01')
      *
-     * @return Project
+     * @return DayCollection
      */
     public function find($month)
     {
-        $days = array();
+        $dayCollection = new DayCollection();
 
-        $timeCards = $this->timeCardRepository->findForMonth($month);
-        foreach ($timeCards as $timeCard) {
-            $day = $timeCard->getDate();
-            $taskTitle = $timeCard->getTaskTitle();
-            $startHour = $timeCard->getStartHour();
-            $endHour = $timeCard->getEndHour();
+        $rawTimeCards = $this->timeCardRepository->findForMonth($month);
+        foreach ($rawTimeCards as $rawTimeCard) {
+            $project = $rawTimeCard->getProjectName();
+            $day = $rawTimeCard->getDate();
+            $startHour = $rawTimeCard->getStartHour();
+            $endHour = $rawTimeCard->getEndHour();
+            $taskTitle = $rawTimeCard->getTaskTitle();
 
             $start = $this->timeOfDayFactory->fromString($startHour);
             $end = $this->timeOfDayFactory->fromString($endHour);
+            $date = $this->dateFactory->fromString($day);
 
-            $timeCard = new TimeCard($start, $end);
-            if (!isset($days[$day])) {
-                $days[$day] = array();
-            }
-            if (!isset($days[$day][$taskTitle])) {
-                $days[$day][$taskTitle] = 0.0;
-            }
-            $days[$day][$taskTitle] += $timeCard->getWorkingHours();
+            $activityDay = $dayCollection->getActivityDay($date);
+            $task = $activityDay->getTask($project, $taskTitle);
+            $task->addTimeCard(new TimeCard($start, $end));
         }
 
-        return $days;
+        return $dayCollection;
     }
 }

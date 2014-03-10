@@ -14,14 +14,21 @@ namespace TempoSimple\DomainModel\TimeTracking;
 class Task
 {
     /** @var string **/
+    private $projectName;
+
+    /** @var string **/
     private $title;
 
     /** @var array of TimeCard **/
     private $timeCards;
 
-    /** @param string $title */
-    public function __construct($title)
+    /**
+     * @param string $projectName
+     * @param string $title
+     */
+    public function __construct($projectName, $title)
     {
+        $this->projectName = $projectName;
         $this->title = $title;
         $this->timeCards = array();
     }
@@ -30,6 +37,11 @@ class Task
     public function getTitle()
     {
         return $this->title;
+    }
+
+    public function getProjectName()
+    {
+        return $this->projectName;
     }
 
     /** @param TimeCard $timeCard */

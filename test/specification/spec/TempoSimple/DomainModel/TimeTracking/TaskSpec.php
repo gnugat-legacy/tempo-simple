@@ -7,7 +7,8 @@ use TempoSimple\DomainModel\TimeTracking\TimeCard;
 
 class TaskSpec extends ObjectBehavior
 {
-    const TITLE = '#4423 - descriptive title';
+    const PROJECT_NAME = 'Project 1';
+    const TASK_TITLE = '#4423 - descriptive title';
 
     const FIRST_WORKING_HOURS = 0.25;
     const SECOND_WORKING_HOURS = 0.5;
@@ -17,12 +18,12 @@ class TaskSpec extends ObjectBehavior
 
     function let()
     {
-        $this->beConstructedWith(self::TITLE);
+        $this->beConstructedWith(self::PROJECT_NAME, self::TASK_TITLE);
     }
 
     function it_has_a_title()
     {
-        $this->getTitle()->shouldBe(self::TITLE);
+        $this->getTitle()->shouldBe(self::TASK_TITLE);
     }
 
     function it_computes_total_working_days(TimeCard $first, TimeCard $second, TimeCard $third)

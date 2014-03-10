@@ -57,7 +57,7 @@ class BillableTimesheet
             $timeCard = new TimeCard($start, $end);
 
             if (!$project->hasTask($taskTitle)) {
-                $task = new Task($taskTitle);
+                $task = new Task($projectName, $taskTitle);
                 $project->addTask($task);
             }
             $task = $project->getTask($taskTitle);
