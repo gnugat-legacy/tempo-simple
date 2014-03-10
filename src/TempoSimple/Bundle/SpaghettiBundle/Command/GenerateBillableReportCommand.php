@@ -16,7 +16,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\DomainModel\TimeTracking\Project;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet;
 

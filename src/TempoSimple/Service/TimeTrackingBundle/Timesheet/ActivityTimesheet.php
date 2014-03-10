@@ -13,7 +13,6 @@ namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\DomainModel\TimeTracking\DayCollection;
-use TempoSimple\DomainModel\TimeTracking\Project;
 use TempoSimple\DomainModel\TimeTracking\TimeCard;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory;
