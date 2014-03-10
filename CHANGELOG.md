@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.4.0: Activity report
+
+* created the activity report command
+
 ## 0.3.2: Fixed end hour
 
 * updated the oducmentation
