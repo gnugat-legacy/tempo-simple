@@ -18,7 +18,6 @@
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_time_tracking.billable_timesheet" />
-            <argument type="service" id="templating" />
             <argument>%default_project%</argument>
 
             <tag name="console.command" />

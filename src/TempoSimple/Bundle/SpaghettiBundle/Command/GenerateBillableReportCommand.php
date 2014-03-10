@@ -12,10 +12,10 @@
 namespace TempoSimple\Bundle\SpaghettiBundle\Command;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet;
 
@@ -27,28 +27,22 @@ class GenerateBillableReportCommand extends Command
     /** @var BillableTimesheet */
     private $billableTimesheet;
 
-    /** @var EngineInterface */
-    private $templating;
-
     /** @var string */
     private $defaultProject;
 
     /**
      * @param DateFactory       $dateFactory
      * @param BillableTimesheet $billableTimesheet
-     * @param EngineInterface   $templating
      * @param string            $defaultProject
      */
     public function __construct(
         DateFactory $dateFactory,
         BillableTimesheet $billableTimesheet,
-        EngineInterface $templating,
         $defaultProject
     )
     {
         $this->dateFactory = $dateFactory;
         $this->billableTimesheet = $billableTimesheet;
-        $this->templating = $templating;
         $this->defaultProject = $defaultProject;
 
         parent::__construct();
@@ -73,14 +67,16 @@ class GenerateBillableReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        // $billableQuery = $this->consoleQueryFactory->makeBillable($input);
         $month = $input->getOption('month');
         $projectName = $input->getOption('project');
 
-        $project = $this->billableTimesheet->find($projectName, $month);
+        // $byTitleTaskCollection = $this->billableTimesheet->match($billableQuery);
+        $byTitleTaskCollection = $this->billableTimesheet->find($projectName, $month);
 
-        $view = 'TempoSimpleSpaghettiBundle:Report:billable.md.twig';
-        $parameters = array('tasks' => $project->getTasks());
-
-        $output->writeln($this->templating->render($view, $parameters));
+        $table = new Table($output);
+        $table->setHeaders($byTitleTaskCollection->getHeaders());
+        $table->setRows($byTitleTaskCollection->toArray());
+        $table->render();
     }
 }

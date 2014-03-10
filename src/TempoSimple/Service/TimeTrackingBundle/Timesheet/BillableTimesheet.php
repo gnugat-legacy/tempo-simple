@@ -12,7 +12,7 @@
 namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
-use TempoSimple\DomainModel\TimeTracking\Project;
+use TempoSimple\DomainModel\TimeTracking\Collection\ByTitleTaskCollection;
 use TempoSimple\DomainModel\TimeTracking\Task;
 use TempoSimple\DomainModel\TimeTracking\TimeCard;
 use TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory;
@@ -39,31 +39,25 @@ class BillableTimesheet
      * @param string $projectName
      * @param string $month       Format: 'Y-m' (e.g. '1989-01')
      *
-     * @return Project
+     * @return ByTitleTaskCollection
      */
     public function find($projectName, $month)
     {
-        $project = new Project($projectName);
+        $byTitleTaskCollection = new ByTitleTaskCollection();
 
-        $timeCards = $this->timeCardRepository->findForMonthAndProject($month, $projectName);
-        foreach ($timeCards as $timeCard) {
-            $taskTitle = $timeCard->getTaskTitle();
-            $startHour = $timeCard->getStartHour();
-            $endHour = $timeCard->getEndHour();
+        $rawTimeCards = $this->timeCardRepository->findForMonthAndProject($month, $projectName);
+        foreach ($rawTimeCards as $rawTimeCard) {
+            $startHour = $rawTimeCard->getStartHour();
+            $endHour = $rawTimeCard->getEndHour();
+            $taskTitle = $rawTimeCard->getTaskTitle();
 
             $start = $this->timeOfDayFactory->fromString($startHour);
             $end = $this->timeOfDayFactory->fromString($endHour);
 
-            $timeCard = new TimeCard($start, $end);
-
-            if (!$project->hasTask($taskTitle)) {
-                $task = new Task($projectName, $taskTitle);
-                $project->addTask($task);
-            }
-            $task = $project->getTask($taskTitle);
-            $task->addTimeCard($timeCard);
+            $task = $byTitleTaskCollection->getTask($projectName, $taskTitle);
+            $task->addTimeCard(new TimeCard($start, $end));
         }
 
-        return $project;
+        return $byTitleTaskCollection;
     }
 }
