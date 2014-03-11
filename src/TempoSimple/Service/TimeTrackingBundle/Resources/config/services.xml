@@ -8,14 +8,14 @@
             class="TempoSimple\Service\TimeTrackingBundle\Timesheet\ActivityTimesheet"
         >
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
-            <argument type="service" id="tempo_simple_time.time_of_day_factory" />
+            <argument type="service" id="tempo_simple_time_tracking.time_card_factory" />
         </service>
 
         <service id="tempo_simple_time_tracking.billable_timesheet"
             class="TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet"
         >
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
-            <argument type="service" id="tempo_simple_time.time_of_day_factory" />
+            <argument type="service" id="tempo_simple_time_tracking.time_card_factory" />
         </service>
 
         <service id="tempo_simple_time_tracking.daily_timesheet"
@@ -29,6 +29,13 @@
         >
             <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
+        </service>
+
+        <service id="tempo_simple_time_tracking.time_card_factory"
+            class="TempoSimple\Service\TimeTrackingBundle\Factory\TimeCardFactory"
+            public="false"
+        >
+            <argument type="service" id="tempo_simple_time.time_of_day_factory" />
         </service>
     </services>
 </container>
