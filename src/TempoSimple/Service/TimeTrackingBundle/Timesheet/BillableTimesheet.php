@@ -12,10 +12,10 @@
 namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
-use TempoSimple\DomainModel\TimeTracking\Collection\ByTitleTaskCollection;
 use TempoSimple\DomainModel\TimeTracking\Task;
 use TempoSimple\DomainModel\TimeTracking\TimeCard;
 use TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory;
+use TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByTitleTaskCollection;
 
 class BillableTimesheet
 {
@@ -48,14 +48,13 @@ class BillableTimesheet
         $rawTimeCards = $this->timeCardRepository->findForMonthAndProject($month, $projectName);
         foreach ($rawTimeCards as $rawTimeCard) {
             $startHour = $rawTimeCard->getStartHour();
-            $endHour = $rawTimeCard->getEndHour();
-            $taskTitle = $rawTimeCard->getTaskTitle();
-
             $start = $this->timeOfDayFactory->fromString($startHour);
+            $endHour = $rawTimeCard->getEndHour();
             $end = $this->timeOfDayFactory->fromString($endHour);
+            $timeCard = new TimeCard($start, $end);
 
-            $task = $byTitleTaskCollection->getTask($projectName, $taskTitle);
-            $task->addTimeCard(new TimeCard($start, $end));
+            $task = $byTitleTaskCollection->getTask($rawTimeCard);
+            $task->addTimeCard($timeCard);
         }
 
         return $byTitleTaskCollection;

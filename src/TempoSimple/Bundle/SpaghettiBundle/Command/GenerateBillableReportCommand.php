@@ -76,7 +76,7 @@ class GenerateBillableReportCommand extends Command
 
         $table = new Table($output);
         $table->setHeaders($byTitleTaskCollection->getHeaders());
-        $table->setRows($byTitleTaskCollection->toArray());
+        $table->setRows($byTitleTaskCollection->getRows());
         $table->render();
     }
 }

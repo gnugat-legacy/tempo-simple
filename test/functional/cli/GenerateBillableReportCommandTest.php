@@ -33,9 +33,9 @@ class GenerateBillableReportCommandTest extends CommandTestCase
         $dateFactory = $this->prophet->prophesize($dateFactoryClass);
         $dateFactory->today()->willReturn($date->reveal());
 
-        $bytTitleTaskCollectionClass = 'TempoSimple\DomainModel\TimeTracking\Collection\ByTitleTaskCollection';
+        $bytTitleTaskCollectionClass = 'TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByTitleTaskCollection';
         $bytTitleTaskCollection = $this->prophet->prophesize($bytTitleTaskCollectionClass);
-        $bytTitleTaskCollection->toArray()->willReturn(array());
+        $bytTitleTaskCollection->getRows()->willReturn(array());
         $bytTitleTaskCollection->getHeaders()->willReturn(array());
 
         $billableTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet';

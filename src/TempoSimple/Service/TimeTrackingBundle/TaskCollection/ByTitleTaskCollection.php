@@ -9,23 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace TempoSimple\DomainModel\TimeTracking\Collection;
+namespace TempoSimple\Service\TimeTrackingBundle\TaskCollection;
 
+use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCard;
 use TempoSimple\DomainModel\TimeTracking\Task;
 
-class ByTitleTaskCollection
+class ByTitleTaskCollection implements TaskCollection
 {
-    /** @return array of Task */
-    private $tasks = array();
+    /** @var array */
+    private $collection = array();
 
-    /**
-     * @param string $projectName
-     * @param string $taskTitle
-     *
-     * @return Task
-     */
-    public function getTask($projectName, $taskTitle)
+    /** {@inheritdoc} */
+    public function getTask(TimeCard $timeCard)
     {
+        $projectName = $timeCard->getProjectName();
+        $taskTitle = $timeCard->getTaskTitle();
+
         if (!isset($this->tasks[$taskTitle])) {
             $this->tasks[$taskTitle] = new Task($projectName, $taskTitle);
         }
@@ -33,8 +32,14 @@ class ByTitleTaskCollection
         return $this->tasks[$taskTitle];
     }
 
-    /** @return array of Task */
-    public function toArray()
+    /** {@inheritdoc} */
+    public function getHeaders()
+    {
+        return array('Tâche', 'Temps passé');
+    }
+
+    /** {@inheritdoc} */
+    public function getRows()
     {
         $rows = array();
         foreach ($this->tasks as $task) {
@@ -45,11 +50,5 @@ class ByTitleTaskCollection
         }
 
         return $rows;
-    }
-
-    /** @return array */
-    public function getHeaders()
-    {
-        return array('Tâche', 'Temps passé');
     }
 }
