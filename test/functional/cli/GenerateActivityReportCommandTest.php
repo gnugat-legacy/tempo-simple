@@ -23,9 +23,10 @@ class GenerateActivityReportCommandTest extends CommandTestCase
     {
         $parameters = array();
 
-        $dayCollectionClass = 'TempoSimple\DomainModel\TimeTracking\DayCollection';
-        $dayCollection = $this->prophet->prophesize($dayCollectionClass);
-        $dayCollection->toArray()->willReturn(array());
+        $byDayTaskCollectionClass = 'TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByDayTaskCollection';
+        $byDayTaskCollection = $this->prophet->prophesize($byDayTaskCollectionClass);
+        $byDayTaskCollection->getHeaders()->willReturn(array());
+        $byDayTaskCollection->getRows()->willReturn(array());
 
         $dateClass = 'TempoSimple\DomainModel\Time\Date';
         $date = $this->prophet->prophesize($dateClass);
@@ -37,8 +38,7 @@ class GenerateActivityReportCommandTest extends CommandTestCase
 
         $activityTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\ActivityTimesheet';
         $activityTimesheet = $this->prophet->prophesize($activityTimesheetClass);
-        $activityTimesheet->getHeaders()->willReturn(array());
-        $activityTimesheet->find(self::MONTH)->willReturn($dayCollection->reveal());
+        $activityTimesheet->find(self::MONTH)->willReturn($byDayTaskCollection->reveal());
 
         $command = new GenerateActivityReportCommand(
             $dateFactory->reveal(),

@@ -58,15 +58,15 @@ class GenerateActivityReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $table = new Table($output);
+        // $activityQuery = $this->consoleQueryFactory->makeActivity($input);
         $month = $input->getOption('month');
 
-        $headers = $this->activityTimesheet->getHeaders();
-        $dayCollection = $this->activityTimesheet->find($month);
+        // $byDayTaskCollection = $this->activityTimesheet->match($activityQuery);
+        $byDayTaskCollection = $this->activityTimesheet->find($month);
 
-        $table->setHeaders($headers);
-        $table->setRows($dayCollection->toArray());
-
+        $table = new Table($output);
+        $table->setHeaders($byDayTaskCollection->getHeaders());
+        $table->setRows($byDayTaskCollection->getRows());
         $table->render();
     }
 }

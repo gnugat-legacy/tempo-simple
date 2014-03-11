@@ -8,7 +8,6 @@
             class="TempoSimple\Service\TimeTrackingBundle\Timesheet\ActivityTimesheet"
         >
             <argument type="service" id="tempo_simple_doctrine.time_card_reporitory" />
-            <argument type="service" id="tempo_simple_time.date_factory" />
             <argument type="service" id="tempo_simple_time.time_of_day_factory" />
         </service>
 
