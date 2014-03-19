@@ -24,7 +24,6 @@ class ByTitleTaskCollection implements TaskCollection
     {
         $projectName = $timeCard->getProjectName();
         $taskTitle = $timeCard->getTaskTitle();
-
         if (!isset($this->tasks[$taskTitle])) {
             $this->tasks[$taskTitle] = new Task($projectName, $taskTitle);
         }
