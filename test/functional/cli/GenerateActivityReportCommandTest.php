@@ -17,33 +17,11 @@ use TempoSimple\Bundle\SpaghettiBundle\Command\GenerateActivityReportCommand;
 
 class GenerateActivityReportCommandTest extends CommandTestCase
 {
-    const MONTH = '1989-01';
-
     public function testExecute()
     {
         $parameters = array();
 
-        $byDayTaskCollectionClass = 'TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByDayTaskCollection';
-        $byDayTaskCollection = $this->prophet->prophesize($byDayTaskCollectionClass);
-        $byDayTaskCollection->getHeaders()->willReturn(array());
-        $byDayTaskCollection->getRows()->willReturn(array());
-
-        $dateClass = 'TempoSimple\DomainModel\Time\Date';
-        $date = $this->prophet->prophesize($dateClass);
-        $date->getMonth()->willReturn(self::MONTH);
-
-        $dateFactoryClass = 'TempoSimple\Service\TimeBundle\Factory\DateFactory';
-        $dateFactory = $this->prophet->prophesize($dateFactoryClass);
-        $dateFactory->today()->willReturn($date->reveal());
-
-        $activityTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\ActivityTimesheet';
-        $activityTimesheet = $this->prophet->prophesize($activityTimesheetClass);
-        $activityTimesheet->find(self::MONTH)->willReturn($byDayTaskCollection->reveal());
-
-        $command = new GenerateActivityReportCommand(
-            $dateFactory->reveal(),
-            $activityTimesheet->reveal()
-        );
+        $command = 'tempo_simple_spaghetti.generate_activity_report_command';
 
         $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);

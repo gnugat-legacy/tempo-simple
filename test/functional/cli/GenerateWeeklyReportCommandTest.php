@@ -21,24 +21,7 @@ class GenerateWeeklyReportCommandTest extends CommandTestCase
     {
         $parameters = array();
 
-        $lastWorkingWeek = array();
-
-        $dateFactoryClass = 'TempoSimple\Service\TimeBundle\Factory\DateFactory';
-        $dateFactory = $this->prophet->prophesize($dateFactoryClass);
-        $dateFactory->lastWorkingWeek()->willReturn($lastWorkingWeek);
-
-        $weeklyTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\WeeklyTimesheet';
-        $weeklyTimesheet = $this->prophet->prophesize($weeklyTimesheetClass);
-        $weeklyTimesheet->find()->willReturn(array());
-
-        $templatingClass = 'Symfony\Component\Templating\EngineInterface';
-        $templating = $this->prophet->prophesize($templatingClass);
-
-        $command = new GenerateWeeklyReportCommand(
-            $dateFactory->reveal(),
-            $weeklyTimesheet->reveal(),
-            $templating->reveal()
-        );
+        $command = 'tempo_simple_spaghetti.generate_weekly_report_command';
 
         $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);

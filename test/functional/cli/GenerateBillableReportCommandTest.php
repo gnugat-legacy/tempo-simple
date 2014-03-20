@@ -17,36 +17,11 @@ use TempoSimple\Bundle\SpaghettiBundle\Command\GenerateBillableReportCommand;
 
 class GenerateBillableReportCommandTest extends CommandTestCase
 {
-    const MONTH = '1989-01';
-
     public function testExecute()
     {
         $parameters = array();
 
-        $defaultProject = 'Project 1';
-
-        $dateClass = 'TempoSimple\DomainModel\Time\Date';
-        $date = $this->prophet->prophesize($dateClass);
-        $date->getMonth()->willReturn(self::MONTH);
-
-        $dateFactoryClass = 'TempoSimple\Service\TimeBundle\Factory\DateFactory';
-        $dateFactory = $this->prophet->prophesize($dateFactoryClass);
-        $dateFactory->today()->willReturn($date->reveal());
-
-        $bytTitleTaskCollectionClass = 'TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByTitleTaskCollection';
-        $bytTitleTaskCollection = $this->prophet->prophesize($bytTitleTaskCollectionClass);
-        $bytTitleTaskCollection->getRows()->willReturn(array());
-        $bytTitleTaskCollection->getHeaders()->willReturn(array());
-
-        $billableTimesheetClass = 'TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet';
-        $billableTimesheet = $this->prophet->prophesize($billableTimesheetClass);
-        $billableTimesheet->find($defaultProject, self::MONTH)->willReturn($bytTitleTaskCollection->reveal());
-
-        $command = new GenerateBillableReportCommand(
-            $dateFactory->reveal(),
-            $billableTimesheet->reveal(),
-            $defaultProject
-        );
+        $command = 'tempo_simple_spaghetti.generate_billable_report_command';
 
         $this->givenThisCommand($command);
         $this->whenItIsRun($parameters);

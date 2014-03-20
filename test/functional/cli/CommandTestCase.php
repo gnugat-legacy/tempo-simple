@@ -11,8 +11,6 @@
 
 namespace TempoSimple\Test\Functional\Cli;
 
-use Prophecy\Prophet;
-use Prophecy\Exception\Prediction\PredictionException;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Command\Command;
@@ -22,38 +20,19 @@ class CommandTestCase extends WebTestCase
 {
     const EXIT_SUCCESS = 0;
 
-    protected $prophet;
     protected $commandTester;
-
-    protected function setUp()
-    {
-        $this->prophet = new Prophet();
-    }
-
-    protected function tearDown()
-    {
-        $this->prophet->checkPredictions();
-        $this->prophet = null;
-    }
-
-    protected function onNotSuccessfulTest(\Exception $e)
-    {
-        if ($e instanceof PredictionException) {
-            $e = new \PHPUnit_Framework_AssertionFailedError($e->getMessage(), $e->getCode(), $e);
-        }
-
-        return parent::onNotSuccessfulTest($e);
-    }
 
     /**
      * Sets the CommandTester
      *
-     * @param Command $command
+     * @param $commandName
      */
-    protected function givenThisCommand(Command $command)
+    protected function givenThisCommand($commandName)
     {
         $kernel = $this->createKernel();
         $kernel->boot();
+
+        $command = $kernel->getContainer()->get($commandName);
 
         $application = new Application($kernel);
         $application->add($command);
