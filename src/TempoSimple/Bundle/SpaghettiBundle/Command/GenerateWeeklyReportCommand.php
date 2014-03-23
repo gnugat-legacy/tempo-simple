@@ -15,14 +15,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
-use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\WeeklyTimesheet;
 
 class GenerateWeeklyReportCommand extends Command
 {
-    /** @var DateFactory */
-    private $dateFactory;
-
     /** @var WeeklyTimesheet */
     private $weeklyTimesheet;
 
@@ -30,17 +26,14 @@ class GenerateWeeklyReportCommand extends Command
     private $templating;
 
     /**
-     * @param DateFactory     $dateFactory
      * @param WeeklyTimesheet $weeklyTimesheet
      * @param EngineInterface $templating
      */
     public function __construct(
-        DateFactory $dateFactory,
         WeeklyTimesheet $weeklyTimesheet,
         EngineInterface $templating
     )
     {
-        $this->dateFactory = $dateFactory;
         $this->weeklyTimesheet = $weeklyTimesheet;
         $this->templating = $templating;
 

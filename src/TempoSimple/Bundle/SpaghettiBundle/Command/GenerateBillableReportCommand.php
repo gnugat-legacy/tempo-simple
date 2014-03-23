@@ -16,6 +16,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Factory\ConsoleQueryFactory;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\BillableTimesheet;
 
@@ -24,6 +25,9 @@ class GenerateBillableReportCommand extends Command
     /** @var DateFactory */
     private $dateFactory;
 
+    /** @var ConsoleQueryFactory */
+    private $consoleQueryFactory;
+
     /** @var BillableTimesheet */
     private $billableTimesheet;
 
@@ -31,17 +35,20 @@ class GenerateBillableReportCommand extends Command
     private $defaultProject;
 
     /**
-     * @param DateFactory       $dateFactory
-     * @param BillableTimesheet $billableTimesheet
-     * @param string            $defaultProject
+     * @param DateFactory         $dateFactory
+     * @param ConsoleQueryFactory $consoleQueryFactory
+     * @param BillableTimesheet   $billableTimesheet
+     * @param string              $defaultProject
      */
     public function __construct(
         DateFactory $dateFactory,
+        ConsoleQueryFactory $consoleQueryFactory,
         BillableTimesheet $billableTimesheet,
         $defaultProject
     )
     {
         $this->dateFactory = $dateFactory;
+        $this->consoleQueryFactory = $consoleQueryFactory;
         $this->billableTimesheet = $billableTimesheet;
         $this->defaultProject = $defaultProject;
 
@@ -67,12 +74,10 @@ class GenerateBillableReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // $billableQuery = $this->consoleQueryFactory->makeBillable($input);
-        $month = $input->getOption('month');
-        $projectName = $input->getOption('project');
+        $billableQuery = $this->consoleQueryFactory->makeBillable($input);
 
         // $byTitleTaskCollection = $this->billableTimesheet->match($billableQuery);
-        $byTitleTaskCollection = $this->billableTimesheet->find($projectName, $month);
+        $byTitleTaskCollection = $this->billableTimesheet->find($billableQuery->getProjectName(), $billableQuery->getMonth());
 
         $table = new Table($output);
         $table->setHeaders($byTitleTaskCollection->getHeaders());

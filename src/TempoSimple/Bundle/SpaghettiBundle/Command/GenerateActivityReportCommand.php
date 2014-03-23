@@ -16,6 +16,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use TempoSimple\Bundle\SpaghettiBundle\Factory\ConsoleQueryFactory;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\ActivityTimesheet;
 
@@ -24,19 +25,25 @@ class GenerateActivityReportCommand extends Command
     /** @var DateFactory */
     private $dateFactory;
 
+    /** @var ConsoleQueryFactory */
+    private $consoleQueryFactory;
+
     /** @var ActivityTimesheet */
     private $activityTimesheet;
 
     /**
-     * @param DateFactory       $dateFactory
-     * @param ActivityTimesheet $activityTimesheet
+     * @param DateFactory         $dateFactory
+     * @param ConsoleQueryFactory $consoleQueryFactory
+     * @param ActivityTimesheet   $activityTimesheet
      */
     public function __construct(
         DateFactory $dateFactory,
+        ConsoleQueryFactory $consoleQueryFactory,
         ActivityTimesheet $activityTimesheet
     )
     {
         $this->dateFactory = $dateFactory;
+        $this->consoleQueryFactory = $consoleQueryFactory;
         $this->activityTimesheet = $activityTimesheet;
 
         parent::__construct();
@@ -58,11 +65,10 @@ class GenerateActivityReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // $activityQuery = $this->consoleQueryFactory->makeActivity($input);
-        $month = $input->getOption('month');
+        $activityQuery = $this->consoleQueryFactory->makeActivity($input);
 
         // $byDayTaskCollection = $this->activityTimesheet->match($activityQuery);
-        $byDayTaskCollection = $this->activityTimesheet->find($month);
+        $byDayTaskCollection = $this->activityTimesheet->find($activityQuery->getMonth());
 
         $table = new Table($output);
         $table->setHeaders($byDayTaskCollection->getHeaders());

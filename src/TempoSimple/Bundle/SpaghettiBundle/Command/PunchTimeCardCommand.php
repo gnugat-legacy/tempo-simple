@@ -19,12 +19,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCard;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
+use TempoSimple\Bundle\SpaghettiBundle\Factory\ConsoleQueryFactory;
 use TempoSimple\Service\TimeBundle\Factory\TimeOfDayFactory;
 
 class PunchTimeCardCommand extends Command
 {
     /** @var DateFactory */
     private $dateFactory;
+
+    /** @var ConsoleQueryFactory */
+    private $consoleQueryFactory;
 
     /** @var TimeOfDayFactory */
     private $timeOfDayFactory;
@@ -36,19 +40,22 @@ class PunchTimeCardCommand extends Command
     private $defaultProject;
 
     /**
-     * @param DateFactory        $dateFactory
-     * @param TimeOfDayFactory   $timeOfDayFactory
-     * @param TimeCardRepository $timeCardRepository
-     * @param string             $defaultProject
+     * @param DateFactory         $dateFactory
+     * @param ConsoleQueryFactory $consoleQueryFactory
+     * @param TimeOfDayFactory    $timeOfDayFactory
+     * @param TimeCardRepository  $timeCardRepository
+     * @param string              $defaultProject
      */
     public function __construct(
         DateFactory $dateFactory,
+        ConsoleQueryFactory $consoleQueryFactory,
         TimeOfDayFactory $timeOfDayFactory,
         TimeCardRepository $timeCardRepository,
         $defaultProject
     )
     {
         $this->dateFactory = $dateFactory;
+        $this->consoleQueryFactory = $consoleQueryFactory;
         $this->timeOfDayFactory = $timeOfDayFactory;
         $this->timeCardRepository = $timeCardRepository;
         $this->defaultProject = $defaultProject;
@@ -91,13 +98,15 @@ class PunchTimeCardCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $punchQuery = $this->consoleQueryFactory->makePunch($input);
+
         $timeCard = new TimeCard(
-            $input->getOption('project'),
-            $input->getArgument('task'),
-            $input->getOption('date'),
-            $input->getOption('start-hour'),
-            $input->getOption('end-hour'),
-            $input->getOption('description')
+            $punchQuery->getProject(),
+            $punchQuery->getTask(),
+            $punchQuery->getDay(),
+            $punchQuery->getStartHour(),
+            $punchQuery->getEndHour(),
+            $punchQuery->getDescription()
         );
 
         $this->timeCardRepository->insert($timeCard);

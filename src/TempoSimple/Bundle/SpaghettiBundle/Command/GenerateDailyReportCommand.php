@@ -17,12 +17,16 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Templating\EngineInterface;
 use TempoSimple\Service\TimeBundle\Factory\DateFactory;
+use TempoSimple\Bundle\SpaghettiBundle\Factory\ConsoleQueryFactory;
 use TempoSimple\Service\TimeTrackingBundle\Timesheet\DailyTimesheet;
 
 class GenerateDailyReportCommand extends Command
 {
     /** @var DateFactory */
     private $dateFactory;
+
+    /** @var ConsoleQueryFactory */
+    private $consoleQueryFactory;
 
     /** @var DailyTimesheet   */
     private $dailyTimesheet;
@@ -31,17 +35,20 @@ class GenerateDailyReportCommand extends Command
     private $templating;
 
     /**
-     * @param DateFactory     $dateFactory
-     * @param DailyTimesheet  $dailyTimesheet
-     * @param EngineInterface $templating
+     * @param DateFactory         $dateFactory
+     * @param ConsoleQueryFactory $consoleQueryFactory
+     * @param DailyTimesheet      $dailyTimesheet
+     * @param EngineInterface     $templating
      */
     public function __construct(
         DateFactory $dateFactory,
+        ConsoleQueryFactory $consoleQueryFactory,
         DailyTimesheet $dailyTimesheet,
         EngineInterface $templating
     )
     {
         $this->dateFactory = $dateFactory;
+        $this->consoleQueryFactory = $consoleQueryFactory;
         $this->dailyTimesheet = $dailyTimesheet;
         $this->templating = $templating;
 
@@ -64,8 +71,10 @@ class GenerateDailyReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $day = $input->getOption('date');
+        $dailyQuery = $this->consoleQueryFactory->makeDaily($input);
+        $day = $dailyQuery->getDay();
 
+        // $tasks = $this->dailyTimesheet->match($dailyQuery);
         $tasks = $this->dailyTimesheet->find($day);
 
         $view = 'TempoSimpleSpaghettiBundle:Report:daily.md.twig';

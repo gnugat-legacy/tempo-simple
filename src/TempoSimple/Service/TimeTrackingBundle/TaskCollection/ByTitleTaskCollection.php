@@ -24,11 +24,11 @@ class ByTitleTaskCollection implements TaskCollection
     {
         $projectName = $timeCard->getProjectName();
         $taskTitle = $timeCard->getTaskTitle();
-        if (!isset($this->tasks[$taskTitle])) {
-            $this->tasks[$taskTitle] = new Task($projectName, $taskTitle);
+        if (!isset($this->collection[$taskTitle])) {
+            $this->collection[$taskTitle] = new Task($projectName, $taskTitle);
         }
 
-        return $this->tasks[$taskTitle];
+        return $this->collection[$taskTitle];
     }
 
     /** {@inheritdoc} */
@@ -41,7 +41,7 @@ class ByTitleTaskCollection implements TaskCollection
     public function getRows()
     {
         $rows = array();
-        foreach ($this->tasks as $task) {
+        foreach ($this->collection as $task) {
             $rows[] = array(
                 $task->getTitle(),
                 $task->getTotalWorkingDays(),
