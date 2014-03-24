@@ -71,12 +71,12 @@ class ConsoleQueryFactory
         $description = $input->getOption('description');
 
         return new PunchQuery(
-            $project,
             $task,
-            $date,
-            $startHour,
             $endHour,
-            $description
+            $description,
+            $project,
+            $startHour,
+            $date
         );
     }
 }
