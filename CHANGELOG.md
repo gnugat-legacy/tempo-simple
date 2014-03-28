@@ -1,12 +1,20 @@
 # Changes between versions
 
+## 0.5.0: Table billable
+
+* changed billable view into a table
+* created TaskCollections
+* created updater script
+* removed mocking from functional tests
+* created queries
+
 ## 0.4.0: Activity report
 
 * created the activity report command
 
 ## 0.3.2: Fixed end hour
 
-* updated the oducmentation
+* updated the documentation
 * changed end hour argument into an option
 
 ### Backward Compatibility Breaks
