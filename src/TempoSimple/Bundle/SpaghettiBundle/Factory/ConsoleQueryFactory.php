@@ -22,7 +22,7 @@ class ConsoleQueryFactory
     /**
      * @param InputInterface $input
      *
-     * @return BillableQuery
+     * @return ActivityQuery
      */
     public function makeActivity(InputInterface $input)
     {

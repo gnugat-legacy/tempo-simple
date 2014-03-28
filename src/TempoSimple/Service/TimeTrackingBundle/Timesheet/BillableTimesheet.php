@@ -12,7 +12,6 @@
 namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
-use TempoSimple\DomainModel\TimeTracking\Task;
 use TempoSimple\Service\TimeTrackingBundle\Factory\TimeCardFactory;
 use TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByTitleTaskCollection;
 

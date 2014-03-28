@@ -11,10 +11,6 @@
 
 namespace TempoSimple\Test\Functional\Cli;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
-use TempoSimple\Bundle\SpaghettiBundle\Command\GenerateDailyReportCommand;
-
 class GenerateDailyReportCommandTest extends CommandTestCase
 {
     public function testExecute()
