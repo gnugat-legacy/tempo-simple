@@ -1,0 +1,3 @@
+web:
+    resource: "@TempoSimpleWebBundle/Controller"
+    type: annotation

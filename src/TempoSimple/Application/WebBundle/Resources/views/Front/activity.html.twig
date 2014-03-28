@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <table>
+            <tr>
+                {% for header in byDayTaskCollection.getHeaders %}
+                <th>{{ header }}</th>
+                {% endfor %}
+            </tr>
+
+            {% for row in byDayTaskCollection.getRows %}
+            <tr>
+                {% for column in row %}
+                <td>{{ column }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+</html>
