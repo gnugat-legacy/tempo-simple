@@ -6,7 +6,8 @@
     "autoload": {
         "psr-4": {
             "": "src/",
-            "TempoSimple\\Test\\Functional\\Cli\\": "test/functional/cli"
+            "TempoSimple\\Test\\Functional\\Cli\\": "test/functional/cli",
+            "TempoSimple\\Test\\Functional\\Web\\": "test/functional/web"
         }
     },
     "require": {
