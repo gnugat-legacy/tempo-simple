@@ -76,8 +76,7 @@ class GenerateBillableReportCommand extends Command
     {
         $billableQuery = $this->consoleQueryFactory->makeBillable($input);
 
-        // $byTitleTaskCollection = $this->billableTimesheet->match($billableQuery);
-        $byTitleTaskCollection = $this->billableTimesheet->find($billableQuery->getProjectName(), $billableQuery->getMonth());
+        $byTitleTaskCollection = $this->billableTimesheet->match($billableQuery);
 
         $table = new Table($output);
         $table->setHeaders($byTitleTaskCollection->getHeaders());

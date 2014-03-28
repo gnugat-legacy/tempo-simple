@@ -13,6 +13,7 @@ namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\Service\TimeTrackingBundle\Factory\TimeCardFactory;
+use TempoSimple\Service\TimeTrackingBundle\Query\ActivityQuery;
 use TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByDayTaskCollection;
 
 class ActivityTimesheet
@@ -37,15 +38,15 @@ class ActivityTimesheet
     }
 
     /**
-     * @param string $month Format: 'Y-m' (e.g. '1989-01')
+     * @param ActivityQuery $activityQuery
      *
      * @return ByDayTaskCollection
      */
-    public function find($month)
+    public function match(ActivityQuery $activityQuery)
     {
         $byDayTaskCollection = new ByDayTaskCollection();
 
-        $rawTimeCards = $this->timeCardRepository->findForMonth($month);
+        $rawTimeCards = $this->timeCardRepository->findForMonth($activityQuery->getMonth());
         foreach ($rawTimeCards as $rawTimeCard) {
             $timeCard = $this->timeCardFactory->make($rawTimeCard);
 

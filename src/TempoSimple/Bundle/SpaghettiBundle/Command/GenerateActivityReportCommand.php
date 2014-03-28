@@ -67,8 +67,7 @@ class GenerateActivityReportCommand extends Command
     {
         $activityQuery = $this->consoleQueryFactory->makeActivity($input);
 
-        // $byDayTaskCollection = $this->activityTimesheet->match($activityQuery);
-        $byDayTaskCollection = $this->activityTimesheet->find($activityQuery->getMonth());
+        $byDayTaskCollection = $this->activityTimesheet->match($activityQuery);
 
         $table = new Table($output);
         $table->setHeaders($byDayTaskCollection->getHeaders());

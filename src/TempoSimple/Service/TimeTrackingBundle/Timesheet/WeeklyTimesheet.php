@@ -33,7 +33,7 @@ class WeeklyTimesheet
     }
 
     /** @return array */
-    public function find()
+    public function match()
     {
         $dates = $this->dateFactory->lastWorkingWeek();
         $lastWorkingWeek = array();

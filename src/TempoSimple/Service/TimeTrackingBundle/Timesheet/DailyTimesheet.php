@@ -12,6 +12,7 @@
 namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
+use TempoSimple\Service\TimeTrackingBundle\Query\DailyQuery;
 
 class DailyTimesheet
 {
@@ -27,15 +28,15 @@ class DailyTimesheet
     }
 
     /**
-     * @param string $day Format: 'Y-m-d' (e.g. '1989-01-25')
+     * @param DailyQuery $dailyQuery
      *
      * @return array
      */
-    public function find($day)
+    public function match(DailyQuery $dailyQuery)
     {
         $tasks = array();
 
-        $timeCards = $this->timeCardRepository->findForDay($day);
+        $timeCards = $this->timeCardRepository->findForDay($dailyQuery->getDay());
         foreach ($timeCards as $timeCard) {
             $task = $timeCard->getTaskTitle();
             if (!isset($tasks[$task])) {

@@ -74,8 +74,7 @@ class GenerateDailyReportCommand extends Command
         $dailyQuery = $this->consoleQueryFactory->makeDaily($input);
         $day = $dailyQuery->getDay();
 
-        // $tasks = $this->dailyTimesheet->match($dailyQuery);
-        $tasks = $this->dailyTimesheet->find($day);
+        $tasks = $this->dailyTimesheet->match($dailyQuery);
 
         $view = 'TempoSimpleSpaghettiBundle:Report:daily.md.twig';
         $parameters = array(

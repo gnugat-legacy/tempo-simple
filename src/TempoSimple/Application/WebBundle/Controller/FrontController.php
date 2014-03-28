@@ -34,7 +34,7 @@ class FrontController extends Controller
         $activityTimesheet = $this->get('tempo_simple_time_tracking.activity_timesheet');
 
         $activityQuery = $webQueryFactory->makeActivity($request);
-        $byDayTaskCollection = $activityTimesheet->find($activityQuery->getMonth());
+        $byDayTaskCollection = $activityTimesheet->match($activityQuery);
 
         return array(
             'byDayTaskCollection' => $byDayTaskCollection,

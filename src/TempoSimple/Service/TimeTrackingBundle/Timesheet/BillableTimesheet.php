@@ -13,6 +13,7 @@ namespace TempoSimple\Service\TimeTrackingBundle\Timesheet;
 
 use TempoSimple\DataSource\DoctrineBundle\Entity\TimeCardRepository;
 use TempoSimple\Service\TimeTrackingBundle\Factory\TimeCardFactory;
+use TempoSimple\Service\TimeTrackingBundle\Query\BillableQuery;
 use TempoSimple\Service\TimeTrackingBundle\TaskCollection\ByTitleTaskCollection;
 
 class BillableTimesheet
@@ -37,16 +38,18 @@ class BillableTimesheet
     }
 
     /**
-     * @param string $projectName
-     * @param string $month       Format: 'Y-m' (e.g. '1989-01')
+     * @param BillableQuery $billableQuery
      *
      * @return ByTitleTaskCollection
      */
-    public function find($projectName, $month)
+    public function match(BillableQuery $billableQuery)
     {
         $byTitleTaskCollection = new ByTitleTaskCollection();
 
-        $rawTimeCards = $this->timeCardRepository->findForMonthAndProject($month, $projectName);
+        $rawTimeCards = $this->timeCardRepository->findForMonthAndProject(
+            $billableQuery->getMonth(),
+            $billableQuery->getProjectName()
+        );
         foreach ($rawTimeCards as $rawTimeCard) {
             $timeCard = $this->timeCardFactory->make($rawTimeCard);
 

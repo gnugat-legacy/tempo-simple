@@ -50,7 +50,7 @@ class GenerateWeeklyReportCommand extends Command
     /** {@inheritdoc} */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $projects = $this->weeklyTimesheet->find();
+        $projects = $this->weeklyTimesheet->match();
 
         $view = 'TempoSimpleSpaghettiBundle:Report:weekly.md.twig';
         $parameters = array('projects' => $projects);
