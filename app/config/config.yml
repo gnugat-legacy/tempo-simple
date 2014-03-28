@@ -3,7 +3,7 @@ imports:
 
 framework:
     translator:
-        fallback: %locale%
+        fallback: fr
     secret: %secret%
     router:
         resource: %kernel.root_dir%/config/routing.yml
@@ -15,7 +15,7 @@ framework:
     templating:
         engines:
             - twig
-    default_locale: %locale%
+    default_locale: fr
     trusted_proxies: ~
     session:
         name: tempo_simple
@@ -30,10 +30,10 @@ twig:
 
 doctrine:
     dbal:
-        driver: %database_driver%
-        host: %database_host%
-        port: %database_port%
-        dbname: %database_name%
+        driver: pdo_mysql
+        host: 127.0.0.1
+        port: ~
+        dbname: tempo_simple
         user: %database_user%
         password: %database_password%
         charset: UTF8
