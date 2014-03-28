@@ -1,5 +1,12 @@
 # Changes between versions
 
+## 0.6.0: Printable activity
+
+* created web view for activity report
+* removed MySQL settings (except user and password)
+* removed language setting
+* fixed insight violations
+
 ## 0.5.0: Table billable
 
 * changed billable view into a table
