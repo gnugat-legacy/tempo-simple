@@ -52,7 +52,7 @@ class ByDayTaskCollection implements TaskCollection
                 $rows[] = array(
                     $task->getProjectName(),
                     $day,
-                    $task->getTotalWorkingDays(),
+                    $task->getTotalWorkingHours(),
                     $taskTitle,
                 );
             }

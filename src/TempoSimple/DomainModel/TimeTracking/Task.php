@@ -51,13 +51,19 @@ class Task
     }
 
     /** @return float **/
-    public function getTotalWorkingDays()
+    public function getTotalWorkingHours()
     {
         $totalWorkingHours = 0.0;
         foreach ($this->timeCards as $timeCard) {
             $totalWorkingHours += $timeCard->getWorkingHours();
         }
-        $totalWorkingDays = $totalWorkingHours / 8.0;
+        return $totalWorkingHours;
+    }
+
+    /** @return float **/
+    public function getTotalWorkingDays()
+    {
+        $totalWorkingDays = $this->getTotalWorkingHours() / 8.0;
 
         return $totalWorkingDays;
     }
