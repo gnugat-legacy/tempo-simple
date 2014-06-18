@@ -1,5 +1,9 @@
 # Changes between versions
 
+## 0.6.1: Quality
+
+* fixed Insight analysis #16
+
 ## 0.6.0: Printable activity
 
 * created web view for activity report
