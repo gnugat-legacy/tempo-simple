@@ -8,4 +8,4 @@ framework:
 
 doctrine:
     dbal:
-        dbname: tempo_simple_test
+        dbname: %database_name%_test
